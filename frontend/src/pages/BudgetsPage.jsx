@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import api, { formatRupiah } from "../lib/api";
 import { Plus, Trash2, Loader2, X } from "lucide-react";
@@ -21,7 +21,7 @@ export default function BudgetsPage() {
   const [amount, setAmount] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     try {
       const [b, s, c] = await Promise.all([
         api.get("/budgets", { params: { month } }),
@@ -31,10 +31,12 @@ export default function BudgetsPage() {
       setBudgets(b.data);
       setStats(s.data);
       setCategories(c.data.expense || []);
-    } catch {}
-  };
+    } catch (e) {
+      console.error("Failed to load budgets", e);
+    }
+  }, [month]);
 
-  useEffect(() => { load(); }, [month, refreshKey]);
+  useEffect(() => { load(); }, [load, refreshKey]);
 
   const submit = async (e) => {
     e.preventDefault();

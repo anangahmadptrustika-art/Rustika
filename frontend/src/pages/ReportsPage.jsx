@@ -68,8 +68,8 @@ export default function ReportsPage() {
                     outerRadius={75}
                     paddingAngle={2}
                   >
-                    {stats.by_category.map((_, i) => (
-                      <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                    {stats.by_category.map((entry, i) => (
+                      <Cell key={entry.category} fill={COLORS[i % COLORS.length]} />
                     ))}
                   </Pie>
                   <Tooltip

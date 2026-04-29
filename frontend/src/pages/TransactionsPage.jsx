@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import api, { formatRupiah, formatDateID } from "../lib/api";
 import { Plus, Trash2, Edit3, ArrowUpRight, ArrowDownRight, Search } from "lucide-react";
@@ -14,16 +14,18 @@ export default function TransactionsPage() {
   const [openAdd, setOpenAdd] = useState(false);
   const [editing, setEditing] = useState(null);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     try {
       const params = {};
       if (filter !== "all") params.type = filter;
       const { data } = await api.get("/transactions", { params });
       setItems(data);
-    } catch {}
-  };
+    } catch (e) {
+      console.error("Failed to load transactions", e);
+    }
+  }, [filter]);
 
-  useEffect(() => { load(); }, [filter, refreshKey]);
+  useEffect(() => { load(); }, [load, refreshKey]);
 
   const onDelete = async (id) => {
     if (!confirm("Hapus transaksi ini?")) return;

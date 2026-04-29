@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import api, { formatRupiah, formatDateID } from "../lib/api";
 import { Plus, Trash2, X, Loader2, Target as TargetIcon } from "lucide-react";
@@ -17,10 +17,10 @@ export default function GoalsPage() {
   const [deadline, setDeadline] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const load = async () => {
-    try { const { data } = await api.get("/goals"); setGoals(data); } catch {}
-  };
-  useEffect(() => { load(); }, [refreshKey]);
+  const load = useCallback(async () => {
+    try { const { data } = await api.get("/goals"); setGoals(data); } catch (e) { console.error("Failed to load goals", e); }
+  }, []);
+  useEffect(() => { load(); }, [load, refreshKey]);
 
   const submit = async (e) => {
     e.preventDefault();
