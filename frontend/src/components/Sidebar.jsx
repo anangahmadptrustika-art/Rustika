@@ -6,7 +6,7 @@ import useTheme from "../hooks/useTheme";
 const navItems = [
   { to: "/dashboard", label: "Beranda", icon: LayoutDashboard, testid: "nav-dashboard" },
   { to: "/transactions", label: "Transaksi", icon: ArrowLeftRight, testid: "nav-transactions" },
-  { to: "/budgets", label: "Anggaran", icon: Wallet, testid: "nav-budgets" },
+  { to: "/wallets", label: "Dompet", icon: Wallet, testid: "nav-wallets" },
   { to: "/goals", label: "Target", icon: Target, testid: "nav-goals" },
   { to: "/reports", label: "Laporan", icon: BarChart3, testid: "nav-reports" },
 ];

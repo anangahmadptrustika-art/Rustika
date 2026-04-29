@@ -173,6 +173,33 @@ class GoalUpdate(BaseModel):
     deadline: Optional[str] = None
 
 
+class WalletIn(BaseModel):
+    name: str
+    type: Literal["bank", "ewallet", "cash", "other"]
+    balance: float = 0
+    color: Optional[str] = None  # hex like "#118EEA"
+    icon: Optional[str] = None   # short label like "BCA", "DANA"
+
+
+class WalletUpdate(BaseModel):
+    name: Optional[str] = None
+    type: Optional[Literal["bank", "ewallet", "cash", "other"]] = None
+    balance: Optional[float] = None
+    color: Optional[str] = None
+    icon: Optional[str] = None
+
+
+class WalletOut(BaseModel):
+    id: str
+    user_id: str
+    name: str
+    type: str
+    balance: float
+    color: Optional[str] = None
+    icon: Optional[str] = None
+    created_at: str
+
+
 class VoiceParseReq(BaseModel):
     text: str
 
@@ -340,9 +367,14 @@ async def stats_summary(user=Depends(get_current_user), month: Optional[str] = N
         if t["type"] == "expense":
             by_category[t["category"]] = by_category.get(t["category"], 0) + t["amount"]
 
-    # all-time balance
+    # all-time balance from transactions
     all_txs = await db.transactions.find({"user_id": user["id"]}, {"_id": 0}).to_list(length=100000)
     balance = sum((t["amount"] if t["type"] == "income" else -t["amount"]) for t in all_txs)
+
+    # total balance from wallets (preferred saldo total when user has wallets)
+    wallets = await db.wallets.find({"user_id": user["id"]}, {"_id": 0}).to_list(length=500)
+    wallet_balance = sum(w.get("balance", 0) for w in wallets)
+    has_wallets = len(wallets) > 0
 
     # last 6 months
     months_data = []
@@ -371,6 +403,8 @@ async def stats_summary(user=Depends(get_current_user), month: Optional[str] = N
         "total_income": total_income,
         "total_expense": total_expense,
         "balance": balance,
+        "wallet_balance": wallet_balance,
+        "has_wallets": has_wallets,
         "by_category": [{"category": k, "amount": v} for k, v in by_category.items()],
         "trend": months_data,
         "transaction_count": len(txs),
@@ -409,6 +443,62 @@ async def delete_budget(bid: str, user=Depends(get_current_user)):
     res = await db.budgets.delete_one({"id": bid, "user_id": user["id"]})
     if res.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Anggaran tidak ditemukan")
+    return {"message": "Terhapus"}
+
+
+# ---------- Wallets ----------
+DEFAULT_WALLET_COLOR = {
+    "bank": "#118EEA",
+    "ewallet": "#0095DA",
+    "cash": "#21BE7C",
+    "other": "#5C677D",
+}
+
+
+@api_router.post("/wallets", response_model=WalletOut)
+async def create_wallet(w: WalletIn, user=Depends(get_current_user)):
+    wid = str(uuid.uuid4())
+    now = datetime.now(timezone.utc).isoformat()
+    doc = {
+        "id": wid,
+        "user_id": user["id"],
+        "name": w.name,
+        "type": w.type,
+        "balance": float(w.balance or 0),
+        "color": w.color or DEFAULT_WALLET_COLOR.get(w.type, "#118EEA"),
+        "icon": w.icon or w.name[:3].upper(),
+        "created_at": now,
+    }
+    await db.wallets.insert_one(doc)
+    doc.pop("_id", None)
+    return WalletOut(**doc)
+
+
+@api_router.get("/wallets", response_model=List[WalletOut])
+async def list_wallets(user=Depends(get_current_user)):
+    items = await db.wallets.find({"user_id": user["id"]}, {"_id": 0}).sort("created_at", 1).to_list(length=500)
+    return items
+
+
+@api_router.put("/wallets/{wid}", response_model=WalletOut)
+async def update_wallet(wid: str, w: WalletUpdate, user=Depends(get_current_user)):
+    update = {k: v for k, v in w.model_dump().items() if v is not None}
+    if "balance" in update:
+        update["balance"] = float(update["balance"])
+    if not update:
+        raise HTTPException(status_code=400, detail="Tidak ada perubahan")
+    res = await db.wallets.update_one({"id": wid, "user_id": user["id"]}, {"$set": update})
+    if res.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Dompet tidak ditemukan")
+    doc = await db.wallets.find_one({"id": wid}, {"_id": 0})
+    return WalletOut(**doc)
+
+
+@api_router.delete("/wallets/{wid}")
+async def delete_wallet(wid: str, user=Depends(get_current_user)):
+    res = await db.wallets.delete_one({"id": wid, "user_id": user["id"]})
+    if res.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Dompet tidak ditemukan")
     return {"message": "Terhapus"}
 
 
@@ -586,6 +676,7 @@ async def startup():
     await db.transactions.create_index([("user_id", 1), ("date", -1)])
     await db.budgets.create_index([("user_id", 1), ("month", 1)])
     await db.goals.create_index("user_id")
+    await db.wallets.create_index("user_id")
     logger.info("Startup complete - DB indexes ready")
 
 

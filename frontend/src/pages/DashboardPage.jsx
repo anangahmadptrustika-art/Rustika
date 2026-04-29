@@ -41,6 +41,7 @@ export default function DashboardPage() {
 
   const monthLabel = new Date().toLocaleDateString("id-ID", { month: "long", year: "numeric" });
   const masked = "Rp •••••••";
+  const totalSaldo = stats?.has_wallets ? stats.wallet_balance : (stats?.balance ?? 0);
 
   return (
     <div className="space-y-5">
@@ -70,7 +71,7 @@ export default function DashboardPage() {
           className="relative mt-2 font-display text-[2.1rem] font-bold tracking-tight tabular leading-none"
           data-testid="balance-amount"
         >
-          {hidden ? masked : formatRupiah(stats?.balance ?? 0)}
+          {hidden ? masked : formatRupiah(totalSaldo)}
         </div>
         <div className="relative text-xs text-white/60 mt-1.5">{monthLabel}</div>
 

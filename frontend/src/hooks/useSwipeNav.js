@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const TAB_ORDER = ["/dashboard", "/transactions", "/budgets", "/goals", "/reports"];
+const TAB_ORDER = ["/dashboard", "/transactions", "/wallets", "/goals", "/reports"];
 
 /**
  * Returns ref + handlers for swipe navigation between tab routes.
