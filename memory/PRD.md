@@ -21,6 +21,17 @@
 - Pengguna individual yang ingin mencatat keuangan harian dengan cepat (via suara)
 - Pengguna yang ingin memantau anggaran bulanan & target menabung
 
+## Updated (2026-04-29 — Page Transitions, Swipe Nav, PWA)
+- **Page slide transitions**: arah-aware (kanan/kiri) berdasarkan urutan tab; CSS keyframes `page-slide-in-right/left` durasi 320ms cubic-bezier
+- **Swipe gestures**: `useSwipeNav` hook pada `<main>` — geser horizontal > 70px (durasi < 700ms, drift vertikal < 60px) berpindah antar tab; otomatis mengabaikan swipe yang dimulai pada tombol/input/chart
+- **PWA installable**:
+  - `/public/manifest.json` (name, theme_color #1E3F32, display=standalone, orientation=portrait, lang id-ID)
+  - 4 ikon PNG di-generate via PIL (192/512/maskable-512/favicon)
+  - `/public/sw.js` service worker (cache-first untuk static, network-first untuk navigasi, abaikan /api/*)
+  - `usePwaInstall` hook menangkap `beforeinstallprompt`
+  - `InstallBanner` muncul di top-3 setelah 1.2s; tombol "Pasang" memicu prompt; opsi tutup tersimpan di localStorage
+  - Meta tags Apple Web App + viewport `viewport-fit=cover`
+
 ## Updated (2026-04-29 — Mobile-Only Wallet Style)
 - Aplikasi sekarang **mobile-only** seperti dompet digital
 - Frame ponsel ~460px ditengah pada desktop dengan latar gelap `#1E3F32`
