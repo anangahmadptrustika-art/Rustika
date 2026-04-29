@@ -1,0 +1,92 @@
+{
+  "theme": "light",
+  "archetype": "1_organic_and_earthy",
+  "domain": "finance_dashboard",
+  "typography": {
+    "heading_font": "Outfit",
+    "body_font": "Manrope",
+    "notes": "No Inter. Use Outfit for Headings to provide a modern, structural feel. Use Manrope for body text for exceptional legibility at small sizes.",
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl tracking-tight leading-none font-bold",
+      "h2": "text-2xl sm:text-3xl tracking-tight leading-snug font-semibold",
+      "h3": "text-xl sm:text-2xl tracking-tight font-medium",
+      "body": "text-base leading-relaxed text-[#4A5D53]",
+      "small_label": "text-xs tracking-[0.2em] uppercase font-bold text-[#697A6E]"
+    }
+  },
+  "colors": {
+    "background": {
+      "app": "#F7F5F0",
+      "card": "#FFFFFF",
+      "sidebar": "#F0EDE5"
+    },
+    "text": {
+      "primary": "#1E3F32",
+      "secondary": "#697A6E",
+      "muted": "#8A9A86"
+    },
+    "border": {
+      "default": "#E5E2DC",
+      "focus": "#2C3D30"
+    },
+    "brand": {
+      "primary": "#2C3D30",
+      "hover": "#3A5240",
+      "accent": "#D99B58"
+    },
+    "status": {
+      "income_success": "#5F8575",
+      "expense_danger": "#C86753",
+      "warning": "#D99B58"
+    }
+  },
+  "layout_and_spacing": {
+    "strategy": "Control Room Grid (Dense but breathable)",
+    "padding_scale": "Use p-6 or p-8 for card internals. p-4 only for tight lists.",
+    "card_style": "Flat solid background (#FFFFFF), sharp 1px border (#E5E2DC), very subtle ambient shadow (shadow-sm). No heavy drop shadows.",
+    "border_radius": "rounded-2xl for main cards, rounded-xl for inner elements, full for floating buttons.",
+    "bento_grid": "grid-cols-1 md:grid-cols-3 lg:grid-cols-4 with gap-6."
+  },
+  "micro_interactions": {
+    "voice_command_mic": {
+      "default_state": "Floating action button, bg-[#D99B58] text-white shadow-lg, positioned fixed bottom-8 right-8.",
+      "listening_state": "bg-[#C86753] with a multi-layered pulsing ring animation (using tailwind animate-ping layered behind the button). The icon should gently pulse.",
+      "hover_state": "scale-105 transition-transform duration-200 ease-out."
+    },
+    "buttons": "Subtle scale down (active:scale-95) and background hover state shift.",
+    "cards": "No lift on hover for dashboard cards to maintain 'Control Room' stability, only border color shift."
+  },
+  "components": {
+    "navigation": "Sidebar on desktop (sticky, w-64), bottom tab bar on mobile. Must not use transparent header.",
+    "charts": "Recharts or Shadcn Charts. Line charts for trends (smooth curve, stroke: #D99B58), Bar charts for monthly comparison, Pie chart for categories. Tooltips must have dark earthy background (#1E3F32) with white text.",
+    "forms": "Shadcn UI base but customized with #E5E2DC borders. Inputs should have h-12 for better touch targets.",
+    "icons": "lucide-react for standard icons. Keep stroke-width at 1.5 for a premium feel."
+  },
+  "accessibility": {
+    "testing_attributes": "All interactive elements MUST include data-testid (e.g., data-testid='voice-mic-button', data-testid='add-transaction-submit').",
+    "contrast": "Ensure text contrast on buttons. #D99B58 needs dark text or very bold white text depending on APCA. We will use #FFFFFF text on #2C3D30 primary buttons."
+  },
+  "media": {
+    "login_background": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/0d3bbc79-c3cb-43ec-8dab-45e35b4d6e20/images/9036828ad026447cc50c26d485eea03de251c3a484478ff5bd65321915538589.png",
+      "description": "Abstract calming architectural 3d illustration, bone white walls with deep olive green plants. Used for one half of the login/register screen."
+    },
+    "empty_state_savings": {
+      "url": "https://static.prod-images.emergentagent.com/jobs/0d3bbc79-c3cb-43ec-8dab-45e35b4d6e20/images/2f98cb9e878b4696c58366781b5971c2e12c037b240099abad4cc4f235556685.png",
+      "description": "Minimalist 3D terracotta piggy bank for empty savings or 'no transactions' state."
+    },
+    "user_avatar": {
+      "url": "https://images.unsplash.com/photo-1600896997793-b8ed3459a17f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NDh8MHwxfHNlYXJjaHwxfHxpbmRvbmVzaWFuJTIwcGVyc29uJTIwcHJvZmVzc2lvbmFsJTIwaGVhZHNob3QlMjBwb3J0cmFpdHxlbnwwfHx8fDE3Nzc0NDkzMDN8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Professional Indonesian man headshot for default user profile picture."
+    }
+  },
+  "instructions_to_main_agent": [
+    "Build the dashboard in Bahasa Indonesia as requested.",
+    "Apply Archetype 1 (Organic & Earthy). Do NOT use default Tailwind blues, purples, teals, or 'slop' gradients. Stick to the provided Hex codes.",
+    "Implement the Web Speech API for the voice command button. It must recognize Indonesian (lang: 'id-ID').",
+    "When listening, the mic button MUST have a pulsing animation to indicate active recording.",
+    "Use Shadcn UI for dropdowns, dialogs, and forms. Use Recharts for the financial charts.",
+    "Ensure the dashboard utilizes a bento grid structure where charts and summary widgets align cleanly.",
+    "All interactive components MUST use data-testid for testing."
+  ]
+}
