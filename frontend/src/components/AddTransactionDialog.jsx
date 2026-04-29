@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import api from "../lib/api";
-import { X, Loader2 } from "lucide-react";
+import api, { formatRupiah } from "../lib/api";
+import { X, Loader2, Wallet } from "lucide-react";
 import { toast } from "sonner";
 
 export default function AddTransactionDialog({ open, onClose, onSuccess, initial = null }) {
@@ -9,12 +9,16 @@ export default function AddTransactionDialog({ open, onClose, onSuccess, initial
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [walletId, setWalletId] = useState("");
   const [categories, setCategories] = useState({ expense: [], income: [] });
+  const [wallets, setWallets] = useState([]);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
+    if (!open) return;
     api.get("/categories").then((r) => setCategories(r.data)).catch(() => {});
-  }, []);
+    api.get("/wallets").then((r) => setWallets(r.data)).catch(() => {});
+  }, [open]);
 
   useEffect(() => {
     if (initial) {
@@ -23,12 +27,14 @@ export default function AddTransactionDialog({ open, onClose, onSuccess, initial
       setCategory(initial.category);
       setDescription(initial.description || "");
       setDate(initial.date);
+      setWalletId(initial.wallet_id || "");
     } else {
       setType("expense");
       setAmount("");
       setCategory("");
       setDescription("");
       setDate(new Date().toISOString().slice(0, 10));
+      setWalletId("");
     }
   }, [initial, open]);
 
@@ -47,7 +53,7 @@ export default function AddTransactionDialog({ open, onClose, onSuccess, initial
     }
     setSubmitting(true);
     try {
-      const payload = { type, amount: amt, category, description, date };
+      const payload = { type, amount: amt, category, description, date, wallet_id: walletId || null };
       if (initial?.id) {
         await api.put(`/transactions/${initial.id}`, payload);
         toast.success("Transaksi diperbarui");
@@ -64,6 +70,7 @@ export default function AddTransactionDialog({ open, onClose, onSuccess, initial
   };
 
   const cats = type === "income" ? categories.income : categories.expense;
+  const selectedWallet = wallets.find((w) => w.id === walletId);
 
   return (
     <div
@@ -158,6 +165,58 @@ export default function AddTransactionDialog({ open, onClose, onSuccess, initial
               data-testid="tx-description-input"
               className="w-full h-12 px-4 rounded-xl bg-[#F5F7FA] border border-[#E5E9F0] focus:border-[#118EEA] outline-none"
             />
+          </div>
+
+          <div>
+            <label className="eyebrow block mb-2 flex items-center gap-1.5">
+              <Wallet className="w-3 h-3" /> Dompet Sumber {wallets.length > 0 ? "(Opsional)" : ""}
+            </label>
+            {wallets.length === 0 ? (
+              <div className="px-4 py-3 rounded-xl bg-[#F5F7FA] border border-dashed border-[#E5E9F0] text-xs text-[#5C677D]">
+                Belum ada dompet. Tambahkan di tab Dompet untuk auto-update saldo.
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setWalletId("")}
+                    data-testid="wallet-pick-none"
+                    className={`px-3 py-2.5 rounded-xl text-xs font-semibold border transition ${
+                      walletId === ""
+                        ? "border-[#118EEA] bg-[#118EEA]/10 text-[#118EEA]"
+                        : "border-[#E5E9F0] text-[#5C677D] hover:border-[#118EEA]"
+                    }`}
+                  >
+                    Tanpa dompet
+                  </button>
+                  {wallets.map((w) => (
+                    <button
+                      key={w.id}
+                      type="button"
+                      onClick={() => setWalletId(w.id)}
+                      data-testid={`wallet-pick-${w.id}`}
+                      className={`px-3 py-2.5 rounded-xl text-xs font-semibold border transition flex items-center gap-2 ${
+                        walletId === w.id
+                          ? "border-[#118EEA] bg-[#118EEA]/10 text-[#118EEA]"
+                          : "border-[#E5E9F0] text-[#0F172A] hover:border-[#118EEA]"
+                      }`}
+                    >
+                      <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: w.color }} />
+                      <span className="truncate">{w.name}</span>
+                    </button>
+                  ))}
+                </div>
+                {selectedWallet && (
+                  <div className="mt-2 text-[11px] text-[#5C677D]" data-testid="wallet-pick-balance">
+                    Saldo {selectedWallet.name}: {formatRupiah(selectedWallet.balance)}
+                    {type === "expense" && amount && parseFloat(amount) > selectedWallet.balance && (
+                      <span className="text-[#EE4B5C] font-semibold ml-1">⚠ Saldo tidak cukup</span>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           <button

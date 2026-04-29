@@ -9,6 +9,8 @@ export default function VoiceMicFAB({ onTransactionAdded }) {
   const [parsed, setParsed] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [parsing, setParsing] = useState(false);
+  const [wallets, setWallets] = useState([]);
+  const [walletId, setWalletId] = useState("");
 
   const { supported, listening, transcript, start, stop, reset } = useVoiceCommand({
     lang: "id-ID",
@@ -28,11 +30,16 @@ export default function VoiceMicFAB({ onTransactionAdded }) {
   useEffect(() => {
     if (open && supported && !listening && !transcript) {
       start();
+      api.get("/wallets").then((r) => {
+        setWallets(r.data);
+        if (r.data.length > 0) setWalletId(r.data[0].id); // default first wallet
+      }).catch(() => {});
     }
     if (!open) {
       stop();
       reset();
       setParsed(null);
+      setWalletId("");
     }
     // eslint-disable-next-line
   }, [open]);
@@ -49,6 +56,7 @@ export default function VoiceMicFAB({ onTransactionAdded }) {
         amount: parsed.amount,
         category: parsed.category,
         description: parsed.description || transcript,
+        wallet_id: walletId || null,
       });
       toast.success("Transaksi ditambahkan via suara!");
       onTransactionAdded?.();
@@ -164,6 +172,36 @@ export default function VoiceMicFAB({ onTransactionAdded }) {
                   <div className="p-3 rounded-xl bg-[#EDF2F7]">
                     <div className="eyebrow mb-1">Catatan</div>
                     <div className="text-sm text-[#0F172A]">{parsed.description}</div>
+                  </div>
+                )}
+                {wallets.length > 0 && (
+                  <div className="p-3 rounded-xl bg-[#EDF2F7]" data-testid="voice-wallet-picker">
+                    <div className="eyebrow mb-2">Dompet Sumber</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setWalletId("")}
+                        className={`px-3 py-2 rounded-lg text-xs font-semibold border transition ${
+                          walletId === "" ? "border-[#118EEA] bg-white text-[#118EEA]" : "border-transparent bg-white/50 text-[#5C677D]"
+                        }`}
+                      >
+                        Tanpa
+                      </button>
+                      {wallets.map((w) => (
+                        <button
+                          key={w.id}
+                          type="button"
+                          onClick={() => setWalletId(w.id)}
+                          data-testid={`voice-wallet-${w.id}`}
+                          className={`px-3 py-2 rounded-lg text-xs font-semibold border transition flex items-center gap-1.5 ${
+                            walletId === w.id ? "border-[#118EEA] bg-white text-[#118EEA]" : "border-transparent bg-white/50 text-[#0F172A]"
+                          }`}
+                        >
+                          <span className="w-2 h-2 rounded-full shrink-0" style={{ background: w.color }} />
+                          <span className="truncate">{w.name}</span>
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
                 <button

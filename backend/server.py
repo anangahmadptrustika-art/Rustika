@@ -122,6 +122,7 @@ class TransactionIn(BaseModel):
     category: str
     description: Optional[str] = ""
     date: Optional[str] = None  # ISO date
+    wallet_id: Optional[str] = None  # source wallet (optional)
 
 
 class TransactionOut(BaseModel):
@@ -134,6 +135,7 @@ class TransactionOut(BaseModel):
     description: str
     date: str
     created_at: str
+    wallet_id: Optional[str] = None
 
 
 class BudgetIn(BaseModel):
@@ -273,11 +275,28 @@ async def get_categories():
 
 
 # ---------- Transactions ----------
+async def _apply_wallet_delta(user_id: str, wallet_id: Optional[str], ttype: str, amount: float, sign: int = 1):
+    """Adjust wallet balance. sign=+1 to apply, -1 to reverse."""
+    if not wallet_id:
+        return
+    delta = amount if ttype == "income" else -amount
+    delta *= sign
+    await db.wallets.update_one(
+        {"id": wallet_id, "user_id": user_id},
+        {"$inc": {"balance": delta}},
+    )
+
+
 @api_router.post("/transactions", response_model=TransactionOut)
 async def create_transaction(t: TransactionIn, user=Depends(get_current_user)):
     tx_id = str(uuid.uuid4())
     now = datetime.now(timezone.utc)
     date = t.date or now.date().isoformat()
+    # Validate wallet ownership if provided
+    if t.wallet_id:
+        w = await db.wallets.find_one({"id": t.wallet_id, "user_id": user["id"]}, {"_id": 0})
+        if not w:
+            raise HTTPException(status_code=400, detail="Dompet tidak ditemukan")
     doc = {
         "id": tx_id,
         "user_id": user["id"],
@@ -287,8 +306,10 @@ async def create_transaction(t: TransactionIn, user=Depends(get_current_user)):
         "description": t.description or "",
         "date": date,
         "created_at": now.isoformat(),
+        "wallet_id": t.wallet_id,
     }
     await db.transactions.insert_one(doc)
+    await _apply_wallet_delta(user["id"], t.wallet_id, t.type, float(t.amount), +1)
     doc.pop("_id", None)
     return TransactionOut(**doc)
 
@@ -320,21 +341,33 @@ async def list_transactions(
 
 @api_router.delete("/transactions/{tx_id}")
 async def delete_transaction(tx_id: str, user=Depends(get_current_user)):
-    res = await db.transactions.delete_one({"id": tx_id, "user_id": user["id"]})
-    if res.deleted_count == 0:
+    existing = await db.transactions.find_one({"id": tx_id, "user_id": user["id"]}, {"_id": 0})
+    if not existing:
         raise HTTPException(status_code=404, detail="Transaksi tidak ditemukan")
+    await db.transactions.delete_one({"id": tx_id, "user_id": user["id"]})
+    # Reverse wallet effect
+    await _apply_wallet_delta(user["id"], existing.get("wallet_id"), existing["type"], existing["amount"], -1)
     return {"message": "Terhapus"}
 
 
 @api_router.put("/transactions/{tx_id}", response_model=TransactionOut)
 async def update_transaction(tx_id: str, t: TransactionIn, user=Depends(get_current_user)):
+    existing = await db.transactions.find_one({"id": tx_id, "user_id": user["id"]}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Transaksi tidak ditemukan")
+    if t.wallet_id:
+        w = await db.wallets.find_one({"id": t.wallet_id, "user_id": user["id"]}, {"_id": 0})
+        if not w:
+            raise HTTPException(status_code=400, detail="Dompet tidak ditemukan")
     update = {
         "type": t.type, "amount": float(t.amount), "category": t.category,
         "description": t.description or "", "date": t.date or datetime.now(timezone.utc).date().isoformat(),
+        "wallet_id": t.wallet_id,
     }
-    res = await db.transactions.update_one({"id": tx_id, "user_id": user["id"]}, {"$set": update})
-    if res.matched_count == 0:
-        raise HTTPException(status_code=404, detail="Transaksi tidak ditemukan")
+    # Reverse old, apply new (handles wallet change too)
+    await _apply_wallet_delta(user["id"], existing.get("wallet_id"), existing["type"], existing["amount"], -1)
+    await db.transactions.update_one({"id": tx_id, "user_id": user["id"]}, {"$set": update})
+    await _apply_wallet_delta(user["id"], t.wallet_id, t.type, float(t.amount), +1)
     doc = await db.transactions.find_one({"id": tx_id}, {"_id": 0})
     return TransactionOut(**doc)
 
