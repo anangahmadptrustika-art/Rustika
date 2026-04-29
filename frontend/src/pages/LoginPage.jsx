@@ -29,16 +29,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1E3F32] flex justify-center">
-      <div className="relative w-full max-w-[460px] min-h-screen bg-[#F7F5F0] overflow-hidden flex flex-col">
+    <div className="min-h-screen bg-slate-900 flex justify-center">
+      <div className="relative w-full max-w-[460px] min-h-screen bg-[#F5F7FA] overflow-hidden flex flex-col">
         {/* Hero image */}
         <div className="relative h-44 shrink-0">
           <img src={HERO_IMG} alt="Sakuku finance" className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1E3F32]/30 via-[#1E3F32]/35 to-[#F7F5F0]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0F172A]/30 via-[#0F172A]/35 to-[#F5F7FA]" />
           <div className="relative z-10 px-6 pt-7 text-white">
             <div className="flex items-center gap-2.5">
               <div className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur grid place-items-center">
-                <Wallet className="w-5 h-5 text-[#D99B58]" strokeWidth={1.8} />
+                <Wallet className="w-5 h-5 text-[#FF8A00]" strokeWidth={1.8} />
               </div>
               <div className="font-display font-bold text-lg">Sakuku</div>
             </div>
@@ -47,12 +47,12 @@ export default function LoginPage() {
 
         {/* Form card */}
         <div className="flex-1 px-5 pb-10 -mt-10 relative z-10">
-          <div className="bg-white rounded-3xl border border-[#E5E2DC] p-6 shadow-xl">
+          <div className="bg-white rounded-3xl border border-[#E5E9F0] p-6 shadow-xl">
             <div className="eyebrow mb-2">Selamat Datang</div>
-            <h2 className="font-display text-2xl font-bold text-[#1E3F32] tracking-tight">
+            <h2 className="font-display text-2xl font-bold text-[#0F172A] tracking-tight">
               Masuk ke akunmu
             </h2>
-            <p className="mt-1.5 text-sm text-[#697A6E]">Lanjutkan perjalanan keuanganmu.</p>
+            <p className="mt-1.5 text-sm text-[#5C677D]">Lanjutkan perjalanan keuanganmu.</p>
 
             <form onSubmit={onSubmit} className="mt-5 space-y-3.5" data-testid="login-form">
             <div>
@@ -64,7 +64,7 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="kamu@email.com"
                 data-testid="login-email-input"
-                className="w-full h-12 px-4 rounded-xl bg-[#F7F5F0] border border-[#E5E2DC] focus:border-[#2C3D30] outline-none transition"
+                className="w-full h-12 px-4 rounded-xl bg-[#F5F7FA] border border-[#E5E9F0] focus:border-[#118EEA] outline-none transition"
               />
             </div>
             <div>
@@ -76,12 +76,12 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 data-testid="login-password-input"
-                className="w-full h-12 px-4 rounded-xl bg-[#F7F5F0] border border-[#E5E2DC] focus:border-[#2C3D30] outline-none transition"
+                className="w-full h-12 px-4 rounded-xl bg-[#F5F7FA] border border-[#E5E9F0] focus:border-[#118EEA] outline-none transition"
               />
             </div>
 
             {error && (
-              <div className="p-3 rounded-lg bg-[#C86753]/10 border border-[#C86753]/30 text-sm text-[#C86753]" data-testid="login-error">
+              <div className="p-3 rounded-lg bg-[#EE4B5C]/10 border border-[#EE4B5C]/30 text-sm text-[#EE4B5C]" data-testid="login-error">
                 {error}
               </div>
             )}
@@ -90,16 +90,16 @@ export default function LoginPage() {
               type="submit"
               disabled={loading}
               data-testid="login-submit-button"
-              className="w-full h-12 rounded-xl bg-[#2C3D30] text-white font-semibold hover:bg-[#3A5240] active:scale-[0.98] transition flex items-center justify-center gap-2 disabled:opacity-60"
+              className="w-full h-12 rounded-xl bg-[#118EEA] text-white font-semibold hover:bg-[#0E7BC9] active:scale-[0.98] transition flex items-center justify-center gap-2 disabled:opacity-60"
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               Masuk
             </button>
           </form>
 
-          <p className="mt-5 text-sm text-center text-[#697A6E]">
+          <p className="mt-5 text-sm text-center text-[#5C677D]">
             Belum punya akun?{" "}
-            <Link to="/register" className="font-semibold text-[#2C3D30] hover:text-[#D99B58]" data-testid="link-to-register">
+            <Link to="/register" className="font-semibold text-[#118EEA] hover:text-[#FF8A00]" data-testid="link-to-register">
               Daftar sekarang
             </Link>
           </p>

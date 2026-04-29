@@ -5,21 +5,21 @@
 @tailwind utilities;
 
 :root {
-    --bg-app: #F7F5F0;
+    --bg-app: #F5F7FA;
     --bg-card: #FFFFFF;
-    --bg-sidebar: #F0EDE5;
-    --text-primary: #1E3F32;
-    --text-secondary: #4A5D53;
-    --text-muted: #697A6E;
-    --text-dim: #8A9A86;
-    --border-default: #E5E2DC;
-    --border-focus: #2C3D30;
-    --brand-primary: #2C3D30;
-    --brand-hover: #3A5240;
-    --brand-accent: #D99B58;
-    --status-income: #5F8575;
-    --status-expense: #C86753;
-    --status-warning: #D99B58;
+    --bg-sidebar: #EDF2F7;
+    --text-primary: #1A1F36;
+    --text-secondary: #5C677D;
+    --text-muted: #5C677D;
+    --text-dim: #9AA5B8;
+    --border-default: #E5E9F0;
+    --border-focus: #118EEA;
+    --brand-primary: #118EEA;
+    --brand-hover: #0E7BC9;
+    --brand-accent: #FF8A00;
+    --status-income: #21BE7C;
+    --status-expense: #EE4B5C;
+    --status-warning: #FF8A00;
 }
 
 body {
@@ -48,30 +48,30 @@ h1, h2, h3, h4, h5, h6, .font-display {
 
 @layer base {
     :root {
-        --background: 42 31% 95%;
-        --foreground: 153 35% 18%;
+        --background: 210 33% 98%;
+        --foreground: 224 32% 16%;
         --card: 0 0% 100%;
-        --card-foreground: 153 35% 18%;
+        --card-foreground: 224 32% 16%;
         --popover: 0 0% 100%;
-        --popover-foreground: 153 35% 18%;
-        --primary: 132 14% 21%;
-        --primary-foreground: 0 0% 98%;
-        --secondary: 39 24% 92%;
-        --secondary-foreground: 153 35% 18%;
-        --muted: 42 19% 88%;
-        --muted-foreground: 124 7% 45%;
-        --accent: 30 64% 60%;
+        --popover-foreground: 224 32% 16%;
+        --primary: 207 84% 49%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 215 25% 92%;
+        --secondary-foreground: 224 32% 16%;
+        --muted: 215 25% 92%;
+        --muted-foreground: 220 14% 43%;
+        --accent: 30 100% 50%;
         --accent-foreground: 0 0% 100%;
-        --destructive: 11 53% 56%;
+        --destructive: 354 81% 61%;
         --destructive-foreground: 0 0% 100%;
-        --border: 39 17% 87%;
-        --input: 39 17% 87%;
-        --ring: 132 14% 21%;
-        --chart-1: 30 64% 60%;
-        --chart-2: 153 17% 45%;
-        --chart-3: 11 53% 56%;
-        --chart-4: 132 14% 35%;
-        --chart-5: 124 7% 60%;
+        --border: 217 25% 92%;
+        --input: 217 25% 92%;
+        --ring: 207 84% 49%;
+        --chart-1: 207 84% 49%;
+        --chart-2: 152 70% 43%;
+        --chart-3: 354 81% 61%;
+        --chart-4: 30 100% 50%;
+        --chart-5: 220 14% 60%;
         --radius: 1rem;
     }
 }
@@ -107,8 +107,8 @@ h1, h2, h3, h4, h5, h6, .font-display {
 /* Subtle scrollbar */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #D8D3C8; border-radius: 6px; }
-::-webkit-scrollbar-thumb:hover { background: #B7B0A2; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: #9AA5B8; }
 
 /* Page transitions */
 @keyframes page-slide-right {

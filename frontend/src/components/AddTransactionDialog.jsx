@@ -67,33 +67,33 @@ export default function AddTransactionDialog({ open, onClose, onSuccess, initial
 
   return (
     <div
-      className="absolute inset-0 z-50 grid place-items-center bg-[#1E3F32]/50 backdrop-blur-sm p-4"
+      className="absolute inset-0 z-50 grid place-items-center bg-[#0F172A]/50 backdrop-blur-sm p-4"
       onClick={onClose}
       data-testid="add-transaction-dialog"
     >
       <form
         onSubmit={submit}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-3xl border border-[#E5E2DC] w-full max-w-md p-6 shadow-2xl max-h-[85vh] overflow-y-auto"
+        className="bg-white rounded-3xl border border-[#E5E9F0] w-full max-w-md p-6 shadow-2xl max-h-[85vh] overflow-y-auto"
       >
         <div className="flex items-start justify-between mb-5">
           <div>
             <div className="eyebrow">{initial ? "Edit" : "Baru"}</div>
-            <h3 className="font-display text-2xl font-bold text-[#1E3F32] mt-1">
+            <h3 className="font-display text-2xl font-bold text-[#0F172A] mt-1">
               {initial ? "Edit Transaksi" : "Tambah Transaksi"}
             </h3>
           </div>
-          <button type="button" onClick={onClose} className="p-1.5 rounded-lg hover:bg-[#F0EDE5] text-[#697A6E]">
+          <button type="button" onClick={onClose} className="p-1.5 rounded-lg hover:bg-[#EDF2F7] text-[#5C677D]">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 p-1 bg-[#F0EDE5] rounded-xl mb-5">
+        <div className="grid grid-cols-2 gap-2 p-1 bg-[#EDF2F7] rounded-xl mb-5">
           <button
             type="button"
             onClick={() => { setType("expense"); setCategory(""); }}
             data-testid="type-expense-btn"
-            className={`py-2.5 rounded-lg text-sm font-semibold transition ${type === "expense" ? "bg-white text-[#C86753] shadow-sm" : "text-[#697A6E]"}`}
+            className={`py-2.5 rounded-lg text-sm font-semibold transition ${type === "expense" ? "bg-white text-[#EE4B5C] shadow-sm" : "text-[#5C677D]"}`}
           >
             Pengeluaran
           </button>
@@ -101,7 +101,7 @@ export default function AddTransactionDialog({ open, onClose, onSuccess, initial
             type="button"
             onClick={() => { setType("income"); setCategory(""); }}
             data-testid="type-income-btn"
-            className={`py-2.5 rounded-lg text-sm font-semibold transition ${type === "income" ? "bg-white text-[#5F8575] shadow-sm" : "text-[#697A6E]"}`}
+            className={`py-2.5 rounded-lg text-sm font-semibold transition ${type === "income" ? "bg-white text-[#21BE7C] shadow-sm" : "text-[#5C677D]"}`}
           >
             Pemasukan
           </button>
@@ -118,7 +118,7 @@ export default function AddTransactionDialog({ open, onClose, onSuccess, initial
               onChange={(e) => setAmount(e.target.value)}
               placeholder="0"
               data-testid="tx-amount-input"
-              className="w-full h-12 px-4 rounded-xl bg-[#F7F5F0] border border-[#E5E2DC] focus:border-[#2C3D30] outline-none tabular text-lg font-semibold"
+              className="w-full h-12 px-4 rounded-xl bg-[#F5F7FA] border border-[#E5E9F0] focus:border-[#118EEA] outline-none tabular text-lg font-semibold"
               required
             />
           </div>
@@ -129,7 +129,7 @@ export default function AddTransactionDialog({ open, onClose, onSuccess, initial
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               data-testid="tx-category-select"
-              className="w-full h-12 px-4 rounded-xl bg-[#F7F5F0] border border-[#E5E2DC] focus:border-[#2C3D30] outline-none"
+              className="w-full h-12 px-4 rounded-xl bg-[#F5F7FA] border border-[#E5E9F0] focus:border-[#118EEA] outline-none"
               required
             >
               <option value="">Pilih kategori</option>
@@ -144,7 +144,7 @@ export default function AddTransactionDialog({ open, onClose, onSuccess, initial
               value={date}
               onChange={(e) => setDate(e.target.value)}
               data-testid="tx-date-input"
-              className="w-full h-12 px-4 rounded-xl bg-[#F7F5F0] border border-[#E5E2DC] focus:border-[#2C3D30] outline-none"
+              className="w-full h-12 px-4 rounded-xl bg-[#F5F7FA] border border-[#E5E9F0] focus:border-[#118EEA] outline-none"
             />
           </div>
 
@@ -156,7 +156,7 @@ export default function AddTransactionDialog({ open, onClose, onSuccess, initial
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Mis. Makan siang di kantor"
               data-testid="tx-description-input"
-              className="w-full h-12 px-4 rounded-xl bg-[#F7F5F0] border border-[#E5E2DC] focus:border-[#2C3D30] outline-none"
+              className="w-full h-12 px-4 rounded-xl bg-[#F5F7FA] border border-[#E5E9F0] focus:border-[#118EEA] outline-none"
             />
           </div>
 
@@ -164,7 +164,7 @@ export default function AddTransactionDialog({ open, onClose, onSuccess, initial
             type="submit"
             disabled={submitting}
             data-testid="tx-submit-button"
-            className="w-full h-12 rounded-xl bg-[#2C3D30] text-white font-semibold hover:bg-[#3A5240] active:scale-95 transition flex items-center justify-center gap-2 disabled:opacity-60"
+            className="w-full h-12 rounded-xl bg-[#118EEA] text-white font-semibold hover:bg-[#0E7BC9] active:scale-95 transition flex items-center justify-center gap-2 disabled:opacity-60"
           >
             {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
             {initial ? "Simpan Perubahan" : "Tambah"}

@@ -6,8 +6,8 @@ export default function ProtectedRoute({ children }) {
   const { user, checked } = useAuth();
   if (!checked) {
     return (
-      <div className="min-h-screen grid place-items-center bg-[#F7F5F0]">
-        <Loader2 className="w-6 h-6 animate-spin text-[#2C3D30]" />
+      <div className="min-h-screen grid place-items-center bg-[#F5F7FA]">
+        <Loader2 className="w-6 h-6 animate-spin text-[#118EEA]" />
       </div>
     );
   }

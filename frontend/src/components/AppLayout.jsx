@@ -22,9 +22,9 @@ export default function AppLayout() {
   }, [pathname]);
 
   return (
-    <div className="min-h-screen bg-[#1E3F32] flex justify-center">
+    <div className="min-h-screen bg-slate-900 flex justify-center">
       {/* Mobile phone frame */}
-      <div className="relative w-full max-w-[460px] min-h-screen bg-[#F7F5F0] shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-[460px] min-h-screen bg-[#F5F7FA] shadow-2xl overflow-hidden">
         <main ref={swipeRef} className="pb-28">
           <div
             key={pathname}

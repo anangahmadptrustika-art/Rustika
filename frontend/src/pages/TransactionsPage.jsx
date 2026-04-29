@@ -57,17 +57,17 @@ export default function TransactionsPage() {
           <button
             onClick={() => { setEditing(null); setOpenAdd(true); }}
             data-testid="add-transaction-btn"
-            className="flex items-center gap-1.5 px-4 h-10 rounded-xl bg-[#2C3D30] text-white text-sm font-semibold hover:bg-[#3A5240] active:scale-95 transition"
+            className="flex items-center gap-1.5 px-4 h-10 rounded-xl bg-[#118EEA] text-white text-sm font-semibold hover:bg-[#0E7BC9] active:scale-95 transition"
           >
             <Plus className="w-4 h-4" /> Tambah
           </button>
         }
       />
 
-      <div className="bg-white rounded-2xl border border-[#E5E2DC] p-4 fade-up fade-up-1">
+      <div className="bg-white rounded-2xl border border-[#E5E9F0] p-4 fade-up fade-up-1">
         {/* Filter & search */}
         <div className="flex flex-wrap items-center gap-3 mb-5">
-          <div className="flex gap-1 p-1 bg-[#F0EDE5] rounded-xl">
+          <div className="flex gap-1 p-1 bg-[#EDF2F7] rounded-xl">
             {[
               { v: "all", label: "Semua" },
               { v: "income", label: "Pemasukan" },
@@ -77,56 +77,56 @@ export default function TransactionsPage() {
                 key={f.v}
                 onClick={() => setFilter(f.v)}
                 data-testid={`filter-${f.v}`}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${filter === f.v ? "bg-white text-[#1E3F32] shadow-sm" : "text-[#697A6E]"}`}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${filter === f.v ? "bg-white text-[#0F172A] shadow-sm" : "text-[#5C677D]"}`}
               >
                 {f.label}
               </button>
             ))}
           </div>
           <div className="flex-1 min-w-[200px] relative">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A9A86]" />
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9AA5B8]" />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Cari catatan / kategori..."
               data-testid="transactions-search"
-              className="w-full h-11 pl-10 pr-4 rounded-xl bg-[#F7F5F0] border border-[#E5E2DC] focus:border-[#2C3D30] outline-none text-sm"
+              className="w-full h-11 pl-10 pr-4 rounded-xl bg-[#F5F7FA] border border-[#E5E9F0] focus:border-[#118EEA] outline-none text-sm"
             />
           </div>
         </div>
 
         {/* List */}
         {filtered.length === 0 ? (
-          <div className="text-center py-16 text-[#8A9A86]" data-testid="empty-transactions">
-            <div className="font-display text-xl text-[#1E3F32] mb-1">Belum ada transaksi</div>
+          <div className="text-center py-16 text-[#9AA5B8]" data-testid="empty-transactions">
+            <div className="font-display text-xl text-[#0F172A] mb-1">Belum ada transaksi</div>
             Tambahkan transaksi pertamamu, atau gunakan tombol mikrofon untuk menambah via suara.
           </div>
         ) : (
-          <div className="divide-y divide-[#F0EDE5]">
+          <div className="divide-y divide-[#EDF2F7]">
             {filtered.map((t) => (
               <div key={t.id} className="flex items-center gap-4 py-4 group" data-testid={`tx-row-${t.id}`}>
-                <div className={`w-11 h-11 rounded-xl grid place-items-center ${t.type === "income" ? "bg-[#5F8575]/15 text-[#5F8575]" : "bg-[#C86753]/15 text-[#C86753]"}`}>
+                <div className={`w-11 h-11 rounded-xl grid place-items-center ${t.type === "income" ? "bg-[#21BE7C]/15 text-[#21BE7C]" : "bg-[#EE4B5C]/15 text-[#EE4B5C]"}`}>
                   {t.type === "income" ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="font-semibold text-[#1E3F32] truncate">{t.description || t.category}</div>
-                  <div className="text-xs text-[#697A6E] mt-0.5">{t.category} · {formatDateID(t.date)}</div>
+                  <div className="font-semibold text-[#0F172A] truncate">{t.description || t.category}</div>
+                  <div className="text-xs text-[#5C677D] mt-0.5">{t.category} · {formatDateID(t.date)}</div>
                 </div>
-                <div className={`font-display font-bold tabular ${t.type === "income" ? "text-[#5F8575]" : "text-[#C86753]"}`}>
+                <div className={`font-display font-bold tabular ${t.type === "income" ? "text-[#21BE7C]" : "text-[#EE4B5C]"}`}>
                   {t.type === "income" ? "+" : "-"}{formatRupiah(t.amount)}
                 </div>
                 <div className="flex items-center gap-1 opacity-100 transition">
                   <button
                     onClick={() => { setEditing(t); setOpenAdd(true); }}
                     data-testid={`edit-tx-${t.id}`}
-                    className="p-2 rounded-lg hover:bg-[#F0EDE5] text-[#697A6E]"
+                    className="p-2 rounded-lg hover:bg-[#EDF2F7] text-[#5C677D]"
                   >
                     <Edit3 className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => onDelete(t.id)}
                     data-testid={`delete-tx-${t.id}`}
-                    className="p-2 rounded-lg hover:bg-[#C86753]/10 text-[#C86753]"
+                    className="p-2 rounded-lg hover:bg-[#EE4B5C]/10 text-[#EE4B5C]"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>

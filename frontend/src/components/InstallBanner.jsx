@@ -32,10 +32,10 @@ export default function InstallBanner() {
 
   return (
     <div
-      className="absolute top-3 left-3 right-3 z-30 bg-[#1E3F32] text-white rounded-2xl px-4 py-3 shadow-lg flex items-center gap-3 fade-up"
+      className="absolute top-3 left-3 right-3 z-30 bg-[#0F172A] text-white rounded-2xl px-4 py-3 shadow-lg flex items-center gap-3 fade-up"
       data-testid="install-banner"
     >
-      <div className="w-10 h-10 rounded-xl bg-[#D99B58] grid place-items-center shrink-0">
+      <div className="w-10 h-10 rounded-xl bg-[#FF8A00] grid place-items-center shrink-0">
         <Download className="w-5 h-5 text-white" strokeWidth={2} />
       </div>
       <div className="flex-1 min-w-0">
@@ -45,7 +45,7 @@ export default function InstallBanner() {
       <button
         onClick={onInstall}
         data-testid="install-confirm"
-        className="px-3 h-9 rounded-lg bg-[#D99B58] text-white text-xs font-bold hover:opacity-90 active:scale-95"
+        className="px-3 h-9 rounded-lg bg-[#FF8A00] text-white text-xs font-bold hover:opacity-90 active:scale-95"
       >
         Pasang
       </button>

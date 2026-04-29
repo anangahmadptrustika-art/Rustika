@@ -71,33 +71,33 @@ export default function VoiceMicFAB({ onTransactionAdded }) {
         className="absolute bottom-24 right-5 z-40"
         aria-label="Tambah transaksi via suara"
       >
-        <span className="relative grid place-items-center w-14 h-14 rounded-full bg-[#D99B58] text-white shadow-xl active:scale-95 transition-transform duration-200">
+        <span className="relative grid place-items-center w-14 h-14 rounded-full bg-[#FF8A00] text-white shadow-xl active:scale-95 transition-transform duration-200">
           <Mic className="w-6 h-6" strokeWidth={1.8} />
-          <span className="absolute inset-0 rounded-full bg-[#D99B58]/40 mic-pulse-ring" />
+          <span className="absolute inset-0 rounded-full bg-[#FF8A00]/40 mic-pulse-ring" />
         </span>
       </button>
 
       {/* Modal */}
       {open && (
         <div
-          className="absolute inset-0 z-50 grid place-items-center bg-[#1E3F32]/50 backdrop-blur-sm p-4"
+          className="absolute inset-0 z-50 grid place-items-center bg-[#0F172A]/50 backdrop-blur-sm p-4"
           onClick={() => setOpen(false)}
           data-testid="voice-modal"
         >
           <div
-            className="bg-white rounded-3xl border border-[#E5E2DC] w-full max-w-md p-6 shadow-2xl max-h-[85vh] overflow-y-auto"
+            className="bg-white rounded-3xl border border-[#E5E9F0] w-full max-w-md p-6 shadow-2xl max-h-[85vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start justify-between mb-2">
               <div>
                 <div className="eyebrow">Perintah Suara</div>
-                <h3 className="font-display text-2xl font-bold text-[#1E3F32] mt-1">
+                <h3 className="font-display text-2xl font-bold text-[#0F172A] mt-1">
                   {listening ? "Mendengarkan..." : parsed ? "Konfirmasi" : "Bicara sekarang"}
                 </h3>
               </div>
               <button
                 onClick={() => setOpen(false)}
-                className="p-1.5 rounded-lg hover:bg-[#F0EDE5] text-[#697A6E]"
+                className="p-1.5 rounded-lg hover:bg-[#EDF2F7] text-[#5C677D]"
                 data-testid="voice-close"
               >
                 <X className="w-5 h-5" />
@@ -108,8 +108,8 @@ export default function VoiceMicFAB({ onTransactionAdded }) {
             <div className="relative grid place-items-center my-6 h-32">
               {listening && (
                 <>
-                  <span className="absolute w-24 h-24 rounded-full bg-[#C86753]/30 mic-pulse-ring" />
-                  <span className="absolute w-24 h-24 rounded-full bg-[#C86753]/30 mic-pulse-ring-2" />
+                  <span className="absolute w-24 h-24 rounded-full bg-[#EE4B5C]/30 mic-pulse-ring" />
+                  <span className="absolute w-24 h-24 rounded-full bg-[#EE4B5C]/30 mic-pulse-ring-2" />
                 </>
               )}
               <button
@@ -117,8 +117,8 @@ export default function VoiceMicFAB({ onTransactionAdded }) {
                 data-testid="voice-toggle"
                 className={`relative w-24 h-24 rounded-full grid place-items-center transition-colors ${
                   listening
-                    ? "bg-[#C86753] text-white"
-                    : "bg-[#D99B58] text-white"
+                    ? "bg-[#EE4B5C] text-white"
+                    : "bg-[#FF8A00] text-white"
                 }`}
               >
                 {listening ? <MicOff className="w-9 h-9" /> : <Mic className="w-9 h-9" />}
@@ -129,7 +129,7 @@ export default function VoiceMicFAB({ onTransactionAdded }) {
             <div className="mb-4">
               <div className="eyebrow mb-2">Anda mengatakan</div>
               <div
-                className="min-h-[60px] p-4 rounded-xl bg-[#F7F5F0] border border-[#E5E2DC] text-[#1E3F32] italic"
+                className="min-h-[60px] p-4 rounded-xl bg-[#F5F7FA] border border-[#E5E9F0] text-[#0F172A] italic"
                 data-testid="voice-transcript"
               >
                 {transcript || (listening ? "..." : "Tekan mikrofon dan bicara")}
@@ -138,39 +138,39 @@ export default function VoiceMicFAB({ onTransactionAdded }) {
 
             {/* Parsed Result */}
             {parsing && (
-              <div className="flex items-center gap-2 text-[#697A6E]">
+              <div className="flex items-center gap-2 text-[#5C677D]">
                 <Loader2 className="w-4 h-4 animate-spin" /> Mengurai perintah...
               </div>
             )}
             {parsed && !parsing && (
               <div className="space-y-3 fade-up" data-testid="voice-parsed">
-                <div className="flex items-center justify-between p-3 rounded-xl bg-[#F0EDE5]">
+                <div className="flex items-center justify-between p-3 rounded-xl bg-[#EDF2F7]">
                   <span className="eyebrow">Tipe</span>
-                  <span className={`text-sm font-bold uppercase ${parsed.type === "income" ? "text-[#5F8575]" : "text-[#C86753]"}`}>
+                  <span className={`text-sm font-bold uppercase ${parsed.type === "income" ? "text-[#21BE7C]" : "text-[#EE4B5C]"}`}>
                     {parsed.type === "income" ? "Pemasukan" : "Pengeluaran"}
                   </span>
                 </div>
-                <div className="flex items-center justify-between p-3 rounded-xl bg-[#F0EDE5]">
+                <div className="flex items-center justify-between p-3 rounded-xl bg-[#EDF2F7]">
                   <span className="eyebrow">Jumlah</span>
-                  <span className="font-display text-xl font-bold text-[#1E3F32] tabular">
+                  <span className="font-display text-xl font-bold text-[#0F172A] tabular">
                     {parsed.amount ? formatRupiah(parsed.amount) : "Tidak dikenali"}
                   </span>
                 </div>
-                <div className="flex items-center justify-between p-3 rounded-xl bg-[#F0EDE5]">
+                <div className="flex items-center justify-between p-3 rounded-xl bg-[#EDF2F7]">
                   <span className="eyebrow">Kategori</span>
-                  <span className="text-sm font-semibold text-[#1E3F32]">{parsed.category}</span>
+                  <span className="text-sm font-semibold text-[#0F172A]">{parsed.category}</span>
                 </div>
                 {parsed.description && (
-                  <div className="p-3 rounded-xl bg-[#F0EDE5]">
+                  <div className="p-3 rounded-xl bg-[#EDF2F7]">
                     <div className="eyebrow mb-1">Catatan</div>
-                    <div className="text-sm text-[#1E3F32]">{parsed.description}</div>
+                    <div className="text-sm text-[#0F172A]">{parsed.description}</div>
                   </div>
                 )}
                 <button
                   onClick={handleConfirm}
                   disabled={!parsed.amount || submitting}
                   data-testid="voice-confirm"
-                  className="w-full mt-2 flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-[#2C3D30] text-white font-semibold hover:bg-[#3A5240] disabled:opacity-50 active:scale-95 transition"
+                  className="w-full mt-2 flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-[#118EEA] text-white font-semibold hover:bg-[#0E7BC9] disabled:opacity-50 active:scale-95 transition"
                 >
                   {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
                   Simpan Transaksi
@@ -178,7 +178,7 @@ export default function VoiceMicFAB({ onTransactionAdded }) {
               </div>
             )}
 
-            <div className="mt-5 text-xs text-[#8A9A86] leading-relaxed">
+            <div className="mt-5 text-xs text-[#9AA5B8] leading-relaxed">
               Contoh: <em>"Catat pengeluaran 50 ribu untuk makan siang"</em> atau <em>"Pemasukan gaji 5 juta"</em>
             </div>
           </div>

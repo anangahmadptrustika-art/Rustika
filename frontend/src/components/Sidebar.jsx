@@ -13,7 +13,7 @@ const navItems = [
 export function MobileNav() {
   return (
     <nav
-      className="absolute bottom-0 inset-x-0 bg-white/90 backdrop-blur-md border-t border-[#E5E2DC] z-30"
+      className="absolute bottom-0 inset-x-0 bg-white/90 backdrop-blur-md border-t border-[#E5E9F0] z-30"
       data-testid="mobile-nav"
     >
       <div className="flex items-center justify-around py-2.5 pb-3">
@@ -26,7 +26,7 @@ export function MobileNav() {
               data-testid={item.testid}
               className={({ isActive }) =>
                 `flex flex-col items-center gap-1 px-3 py-1 rounded-lg transition-colors ${
-                  isActive ? "text-[#2C3D30]" : "text-[#8A9A86]"
+                  isActive ? "text-[#118EEA]" : "text-[#9AA5B8]"
                 }`
               }
             >
@@ -51,7 +51,7 @@ export function TopBar({ title, subtitle, rightSlot }) {
     <div className="flex items-center justify-between mb-5 fade-up" data-testid="topbar">
       <div>
         {subtitle && <div className="eyebrow">{subtitle}</div>}
-        <h1 className="font-display text-2xl font-bold text-[#1E3F32] tracking-tight mt-1">{title}</h1>
+        <h1 className="font-display text-2xl font-bold text-[#0F172A] tracking-tight mt-1">{title}</h1>
       </div>
       {rightSlot}
     </div>
@@ -66,12 +66,12 @@ export function HeaderUser() {
   return (
     <div className="flex items-center justify-between mb-5 fade-up">
       <div className="flex items-center gap-3">
-        <div className="w-11 h-11 rounded-full bg-[#2C3D30] text-white grid place-items-center font-display font-semibold">
+        <div className="w-11 h-11 rounded-full bg-[#118EEA] text-white grid place-items-center font-display font-semibold">
           {(user?.name || "U").charAt(0).toUpperCase()}
         </div>
         <div>
-          <div className="text-xs text-[#697A6E]">Halo,</div>
-          <div className="font-display font-bold text-[#1E3F32] leading-tight" data-testid="header-user-name">
+          <div className="text-xs text-[#5C677D]">Halo,</div>
+          <div className="font-display font-bold text-[#0F172A] leading-tight" data-testid="header-user-name">
             {user?.name?.split(" ")[0] || "Sahabat"}
           </div>
         </div>
@@ -79,7 +79,7 @@ export function HeaderUser() {
       <button
         onClick={onLogout}
         data-testid="logout-button"
-        className="w-10 h-10 rounded-full bg-white border border-[#E5E2DC] grid place-items-center text-[#697A6E] hover:text-[#C86753] hover:border-[#C86753] active:scale-95 transition"
+        className="w-10 h-10 rounded-full bg-white border border-[#E5E9F0] grid place-items-center text-[#5C677D] hover:text-[#EE4B5C] hover:border-[#EE4B5C] active:scale-95 transition"
         aria-label="Keluar"
       >
         <LogOut className="w-4 h-4" strokeWidth={1.8} />

@@ -7,7 +7,7 @@ import {
 } from "recharts";
 import { TopBar } from "../components/Sidebar";
 
-const COLORS = ["#D99B58", "#5F8575", "#C86753", "#2C3D30", "#8A9A86", "#697A6E", "#E5C5A0", "#3A5240", "#B5715E"];
+const COLORS = ["#FF8A00", "#21BE7C", "#EE4B5C", "#118EEA", "#9AA5B8", "#5C677D", "#FFC078", "#0E7BC9", "#D44A56"];
 
 function currentMonth() {
   const d = new Date();
@@ -34,26 +34,26 @@ export default function ReportsPage() {
         value={month}
         onChange={(e) => setMonth(e.target.value)}
         data-testid="reports-month-picker"
-        className="w-full h-11 px-4 rounded-xl bg-white border border-[#E5E2DC] focus:border-[#2C3D30] outline-none text-sm fade-up fade-up-1"
+        className="w-full h-11 px-4 rounded-xl bg-white border border-[#E5E9F0] focus:border-[#118EEA] outline-none text-sm fade-up fade-up-1"
       />
 
       <div className="grid gap-4">
-        <div className="bg-white rounded-2xl border border-[#E5E2DC] p-5 fade-up fade-up-1" data-testid="report-summary">
+        <div className="bg-white rounded-2xl border border-[#E5E9F0] p-5 fade-up fade-up-1" data-testid="report-summary">
           <div className="eyebrow">Ringkasan</div>
-          <h3 className="font-display text-base font-semibold text-[#1E3F32] mt-1">{monthLabel}</h3>
+          <h3 className="font-display text-base font-semibold text-[#0F172A] mt-1">{monthLabel}</h3>
           <div className="mt-4 space-y-3.5">
-            <Row label="Pemasukan" value={stats?.total_income || 0} color="text-[#5F8575]" testid="report-income" />
-            <Row label="Pengeluaran" value={stats?.total_expense || 0} color="text-[#C86753]" testid="report-expense" />
-            <div className="border-t border-[#E5E2DC] pt-4">
-              <Row label="Selisih" value={(stats?.total_income || 0) - (stats?.total_expense || 0)} color="text-[#1E3F32]" big testid="report-net" />
+            <Row label="Pemasukan" value={stats?.total_income || 0} color="text-[#21BE7C]" testid="report-income" />
+            <Row label="Pengeluaran" value={stats?.total_expense || 0} color="text-[#EE4B5C]" testid="report-expense" />
+            <div className="border-t border-[#E5E9F0] pt-4">
+              <Row label="Selisih" value={(stats?.total_income || 0) - (stats?.total_expense || 0)} color="text-[#0F172A]" big testid="report-net" />
             </div>
-            <div className="text-xs text-[#697A6E]">Transaksi: {stats?.transaction_count || 0}</div>
+            <div className="text-xs text-[#5C677D]">Transaksi: {stats?.transaction_count || 0}</div>
           </div>
         </div>
 
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-[#E5E2DC] p-5 fade-up fade-up-2" data-testid="report-category-chart">
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-[#E5E9F0] p-5 fade-up fade-up-2" data-testid="report-category-chart">
           <div className="eyebrow">Distribusi</div>
-          <h3 className="font-display text-base font-semibold text-[#1E3F32] mt-1">Pengeluaran per Kategori</h3>
+          <h3 className="font-display text-base font-semibold text-[#0F172A] mt-1">Pengeluaran per Kategori</h3>
           <div className="h-64 mt-3">
             {stats?.by_category?.length ? (
               <ResponsiveContainer width="100%" height="100%">
@@ -73,7 +73,7 @@ export default function ReportsPage() {
                     ))}
                   </Pie>
                   <Tooltip
-                    contentStyle={{ background: "#1E3F32", border: "none", borderRadius: 12, color: "#fff" }}
+                    contentStyle={{ background: "#0F172A", border: "none", borderRadius: 12, color: "#fff" }}
                     formatter={(v) => formatRupiah(v)}
                   />
                   <Legend
@@ -85,28 +85,28 @@ export default function ReportsPage() {
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full grid place-items-center text-[#8A9A86]">Belum ada data pengeluaran</div>
+              <div className="h-full grid place-items-center text-[#9AA5B8]">Belum ada data pengeluaran</div>
             )}
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-[#E5E2DC] p-5 fade-up fade-up-3" data-testid="report-monthly-chart">
+      <div className="bg-white rounded-2xl border border-[#E5E9F0] p-5 fade-up fade-up-3" data-testid="report-monthly-chart">
         <div className="eyebrow">Perbandingan</div>
-        <h3 className="font-display text-base font-semibold text-[#1E3F32] mt-1">6 Bulan</h3>
+        <h3 className="font-display text-base font-semibold text-[#0F172A] mt-1">6 Bulan</h3>
         <div className="h-64 mt-3">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={stats?.trend || []} margin={{ left: -10, right: 5, top: 10, bottom: 0 }} barGap={4}>
-              <CartesianGrid strokeDasharray="2 4" stroke="#E5E2DC" vertical={false} />
-              <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#697A6E" }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: "#697A6E" }} tickFormatter={(v) => formatRupiahShort(v)} axisLine={false} tickLine={false} />
+              <CartesianGrid strokeDasharray="2 4" stroke="#E5E9F0" vertical={false} />
+              <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#5C677D" }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 11, fill: "#5C677D" }} tickFormatter={(v) => formatRupiahShort(v)} axisLine={false} tickLine={false} />
               <Tooltip
-                contentStyle={{ background: "#1E3F32", border: "none", borderRadius: 12, color: "#fff" }}
+                contentStyle={{ background: "#0F172A", border: "none", borderRadius: 12, color: "#fff" }}
                 formatter={(v, n) => [formatRupiah(v), n === "income" ? "Pemasukan" : "Pengeluaran"]}
-                cursor={{ fill: "#F0EDE5" }}
+                cursor={{ fill: "#EDF2F7" }}
               />
-              <Bar dataKey="income" fill="#5F8575" radius={[8, 8, 0, 0]} />
-              <Bar dataKey="expense" fill="#C86753" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="income" fill="#21BE7C" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="expense" fill="#EE4B5C" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -115,7 +115,7 @@ export default function ReportsPage() {
   );
 }
 
-function Row({ label, value, color = "text-[#1E3F32]", big = false, testid }) {
+function Row({ label, value, color = "text-[#0F172A]", big = false, testid }) {
   return (
     <div className="flex items-center justify-between" data-testid={testid}>
       <div className="eyebrow">{label}</div>
