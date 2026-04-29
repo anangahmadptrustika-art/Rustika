@@ -29,47 +29,32 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen grid lg:grid-cols-2 bg-[#F7F5F0]">
-      {/* Left visual */}
-      <div className="hidden lg:block relative">
-        <img src={HERO_IMG} alt="Sakuku finance" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-[#1E3F32]/60 via-[#1E3F32]/15 to-transparent" />
-        <div className="relative z-10 h-full flex flex-col justify-between p-12 text-white">
-          <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur grid place-items-center">
-              <Wallet className="w-5 h-5 text-[#D99B58]" strokeWidth={1.8} />
+    <div className="min-h-screen bg-[#1E3F32] flex justify-center">
+      <div className="relative w-full max-w-[460px] min-h-screen bg-[#F7F5F0] overflow-hidden flex flex-col">
+        {/* Hero image */}
+        <div className="relative h-44 shrink-0">
+          <img src={HERO_IMG} alt="Sakuku finance" className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#1E3F32]/30 via-[#1E3F32]/35 to-[#F7F5F0]" />
+          <div className="relative z-10 px-6 pt-7 text-white">
+            <div className="flex items-center gap-2.5">
+              <div className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur grid place-items-center">
+                <Wallet className="w-5 h-5 text-[#D99B58]" strokeWidth={1.8} />
+              </div>
+              <div className="font-display font-bold text-lg">Sakuku</div>
             </div>
-            <div className="font-display font-bold text-lg">Sakuku</div>
-          </div>
-          <div>
-            <div className="eyebrow text-white/70 mb-3">Keuangan Pribadi</div>
-            <h1 className="font-display font-bold text-5xl leading-tight max-w-md">
-              Atur uangmu, capai impianmu.
-            </h1>
-            <p className="mt-5 text-white/80 max-w-md leading-relaxed">
-              Catat pengeluaran cukup dengan suara. Pantau anggaran dan target tabungan dalam satu dasbor yang tenang dan elegan.
-            </p>
           </div>
         </div>
-      </div>
 
-      {/* Right form */}
-      <div className="flex items-center justify-center p-6 sm:p-12">
-        <div className="w-full max-w-md">
-          <div className="lg:hidden flex items-center gap-2.5 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-[#2C3D30] grid place-items-center">
-              <Wallet className="w-5 h-5 text-[#D99B58]" strokeWidth={1.8} />
-            </div>
-            <div className="font-display font-bold text-lg text-[#1E3F32]">Sakuku</div>
-          </div>
+        {/* Form card */}
+        <div className="flex-1 px-5 pb-10 -mt-10 relative z-10">
+          <div className="bg-white rounded-3xl border border-[#E5E2DC] p-6 shadow-xl">
+            <div className="eyebrow mb-2">Selamat Datang</div>
+            <h2 className="font-display text-2xl font-bold text-[#1E3F32] tracking-tight">
+              Masuk ke akunmu
+            </h2>
+            <p className="mt-1.5 text-sm text-[#697A6E]">Lanjutkan perjalanan keuanganmu.</p>
 
-          <div className="eyebrow mb-2">Selamat Datang</div>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#1E3F32] tracking-tight">
-            Masuk ke akunmu
-          </h2>
-          <p className="mt-2 text-[#697A6E]">Lanjutkan perjalanan keuanganmu.</p>
-
-          <form onSubmit={onSubmit} className="mt-8 space-y-4" data-testid="login-form">
+            <form onSubmit={onSubmit} className="mt-5 space-y-3.5" data-testid="login-form">
             <div>
               <label className="eyebrow block mb-2">Email</label>
               <input
@@ -79,7 +64,7 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="kamu@email.com"
                 data-testid="login-email-input"
-                className="w-full h-12 px-4 rounded-xl bg-white border border-[#E5E2DC] focus:border-[#2C3D30] outline-none transition"
+                className="w-full h-12 px-4 rounded-xl bg-[#F7F5F0] border border-[#E5E2DC] focus:border-[#2C3D30] outline-none transition"
               />
             </div>
             <div>
@@ -91,7 +76,7 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 data-testid="login-password-input"
-                className="w-full h-12 px-4 rounded-xl bg-white border border-[#E5E2DC] focus:border-[#2C3D30] outline-none transition"
+                className="w-full h-12 px-4 rounded-xl bg-[#F7F5F0] border border-[#E5E2DC] focus:border-[#2C3D30] outline-none transition"
               />
             </div>
 
@@ -112,12 +97,13 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="mt-6 text-sm text-[#697A6E]">
+          <p className="mt-5 text-sm text-center text-[#697A6E]">
             Belum punya akun?{" "}
             <Link to="/register" className="font-semibold text-[#2C3D30] hover:text-[#D99B58]" data-testid="link-to-register">
               Daftar sekarang
             </Link>
           </p>
+          </div>
         </div>
       </div>
     </div>

@@ -67,14 +67,14 @@ export default function AddTransactionDialog({ open, onClose, onSuccess, initial
 
   return (
     <div
-      className="fixed inset-0 z-50 grid place-items-center bg-[#1E3F32]/40 backdrop-blur-sm p-4"
+      className="absolute inset-0 z-50 grid place-items-center bg-[#1E3F32]/50 backdrop-blur-sm p-4"
       onClick={onClose}
       data-testid="add-transaction-dialog"
     >
       <form
         onSubmit={submit}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-3xl border border-[#E5E2DC] w-full max-w-md p-7 shadow-2xl"
+        className="bg-white rounded-3xl border border-[#E5E2DC] w-full max-w-md p-6 shadow-2xl max-h-[85vh] overflow-y-auto"
       >
         <div className="flex items-start justify-between mb-5">
           <div>

@@ -21,6 +21,16 @@
 - Pengguna individual yang ingin mencatat keuangan harian dengan cepat (via suara)
 - Pengguna yang ingin memantau anggaran bulanan & target menabung
 
+## Updated (2026-04-29 — Mobile-Only Wallet Style)
+- Aplikasi sekarang **mobile-only** seperti dompet digital
+- Frame ponsel ~460px ditengah pada desktop dengan latar gelap `#1E3F32`
+- Sidebar desktop dihapus → bottom nav jadi navigasi utama (Beranda/Transaksi/Anggaran/Target/Laporan)
+- Dashboard dirombak: **Wallet Card** hijau dengan saldo besar + tombol show/hide saldo, mini cards Pemasukan/Pengeluaran, **Quick Actions 3 kolom** (Tambah/Riwayat/Suara), area chart 6 bulan, transaksi terbaru
+- Header berisi avatar + nama + tombol logout (HeaderUser component)
+- Login/Register dirombak: hero image di atas (h-44) + form card melayang di atasnya
+- Semua dialog (Add Transaction, Budget, Goal, Voice) berubah dari `fixed` ke `absolute` dalam frame ponsel
+- Mic FAB direposisi: `absolute bottom-24 right-5` agar selalu di dalam frame
+
 ## Implemented (2026-04-29)
 ### Backend (`/app/backend/server.py`)
 - Auth: register/login/logout/me with JWT cookie

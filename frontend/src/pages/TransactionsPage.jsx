@@ -4,6 +4,7 @@ import api, { formatRupiah, formatDateID } from "../lib/api";
 import { Plus, Trash2, Edit3, ArrowUpRight, ArrowDownRight, Search } from "lucide-react";
 import { toast } from "sonner";
 import AddTransactionDialog from "../components/AddTransactionDialog";
+import { TopBar } from "../components/Sidebar";
 
 export default function TransactionsPage() {
   const { refreshKey, refresh } = useOutletContext();
@@ -46,23 +47,22 @@ export default function TransactionsPage() {
   });
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-end justify-between flex-wrap gap-4 fade-up">
-        <div>
-          <div className="eyebrow">Catatan</div>
-          <h1 className="font-display text-4xl font-bold text-[#1E3F32] tracking-tight mt-2">Transaksi</h1>
-          <p className="text-[#697A6E] mt-2">{items.length} transaksi tercatat</p>
-        </div>
-        <button
-          onClick={() => { setEditing(null); setOpenAdd(true); }}
-          data-testid="add-transaction-btn"
-          className="flex items-center gap-2 px-5 h-12 rounded-xl bg-[#2C3D30] text-white font-semibold hover:bg-[#3A5240] active:scale-95 transition"
-        >
-          <Plus className="w-4 h-4" /> Tambah
-        </button>
-      </div>
+    <div className="space-y-5">
+      <TopBar
+        subtitle="Catatan"
+        title="Transaksi"
+        rightSlot={
+          <button
+            onClick={() => { setEditing(null); setOpenAdd(true); }}
+            data-testid="add-transaction-btn"
+            className="flex items-center gap-1.5 px-4 h-10 rounded-xl bg-[#2C3D30] text-white text-sm font-semibold hover:bg-[#3A5240] active:scale-95 transition"
+          >
+            <Plus className="w-4 h-4" /> Tambah
+          </button>
+        }
+      />
 
-      <div className="bg-white rounded-2xl border border-[#E5E2DC] p-5 fade-up fade-up-1">
+      <div className="bg-white rounded-2xl border border-[#E5E2DC] p-4 fade-up fade-up-1">
         {/* Filter & search */}
         <div className="flex flex-wrap items-center gap-3 mb-5">
           <div className="flex gap-1 p-1 bg-[#F0EDE5] rounded-xl">
@@ -113,7 +113,7 @@ export default function TransactionsPage() {
                 <div className={`font-display font-bold tabular ${t.type === "income" ? "text-[#5F8575]" : "text-[#C86753]"}`}>
                   {t.type === "income" ? "+" : "-"}{formatRupiah(t.amount)}
                 </div>
-                <div className="flex items-center gap-1 md:opacity-0 md:group-hover:opacity-100 transition">
+                <div className="flex items-center gap-1 opacity-100 transition">
                   <button
                     onClick={() => { setEditing(t); setOpenAdd(true); }}
                     data-testid={`edit-tx-${t.id}`}

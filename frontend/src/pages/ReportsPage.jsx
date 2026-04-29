@@ -5,6 +5,7 @@ import {
   PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, Legend,
 } from "recharts";
+import { TopBar } from "../components/Sidebar";
 
 const COLORS = ["#D99B58", "#5F8575", "#C86753", "#2C3D30", "#8A9A86", "#697A6E", "#E5C5A0", "#3A5240", "#B5715E"];
 
@@ -25,27 +26,22 @@ export default function ReportsPage() {
   const monthLabel = new Date(month + "-01").toLocaleDateString("id-ID", { month: "long", year: "numeric" });
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-end justify-between flex-wrap gap-4 fade-up">
-        <div>
-          <div className="eyebrow">Analisis</div>
-          <h1 className="font-display text-4xl font-bold text-[#1E3F32] tracking-tight mt-2">Laporan</h1>
-          <p className="text-[#697A6E] mt-2">{monthLabel}</p>
-        </div>
-        <input
-          type="month"
-          value={month}
-          onChange={(e) => setMonth(e.target.value)}
-          data-testid="reports-month-picker"
-          className="h-12 px-4 rounded-xl bg-white border border-[#E5E2DC] focus:border-[#2C3D30] outline-none"
-        />
-      </div>
+    <div className="space-y-5">
+      <TopBar subtitle="Analisis" title="Laporan" />
 
-      <div className="grid lg:grid-cols-3 gap-5">
-        <div className="bg-white rounded-2xl border border-[#E5E2DC] p-6 fade-up fade-up-1" data-testid="report-summary">
+      <input
+        type="month"
+        value={month}
+        onChange={(e) => setMonth(e.target.value)}
+        data-testid="reports-month-picker"
+        className="w-full h-11 px-4 rounded-xl bg-white border border-[#E5E2DC] focus:border-[#2C3D30] outline-none text-sm fade-up fade-up-1"
+      />
+
+      <div className="grid gap-4">
+        <div className="bg-white rounded-2xl border border-[#E5E2DC] p-5 fade-up fade-up-1" data-testid="report-summary">
           <div className="eyebrow">Ringkasan</div>
-          <h3 className="font-display text-xl font-semibold text-[#1E3F32] mt-1">Bulan Ini</h3>
-          <div className="mt-5 space-y-4">
+          <h3 className="font-display text-base font-semibold text-[#1E3F32] mt-1">{monthLabel}</h3>
+          <div className="mt-4 space-y-3.5">
             <Row label="Pemasukan" value={stats?.total_income || 0} color="text-[#5F8575]" testid="report-income" />
             <Row label="Pengeluaran" value={stats?.total_expense || 0} color="text-[#C86753]" testid="report-expense" />
             <div className="border-t border-[#E5E2DC] pt-4">
@@ -55,10 +51,10 @@ export default function ReportsPage() {
           </div>
         </div>
 
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-[#E5E2DC] p-6 fade-up fade-up-2" data-testid="report-category-chart">
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-[#E5E2DC] p-5 fade-up fade-up-2" data-testid="report-category-chart">
           <div className="eyebrow">Distribusi</div>
-          <h3 className="font-display text-xl font-semibold text-[#1E3F32] mt-1">Pengeluaran per Kategori</h3>
-          <div className="h-72 mt-4">
+          <h3 className="font-display text-base font-semibold text-[#1E3F32] mt-1">Pengeluaran per Kategori</h3>
+          <div className="h-64 mt-3">
             {stats?.by_category?.length ? (
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -66,10 +62,10 @@ export default function ReportsPage() {
                     data={stats.by_category}
                     dataKey="amount"
                     nameKey="category"
-                    cx="40%"
-                    cy="50%"
-                    innerRadius={55}
-                    outerRadius={95}
+                    cx="50%"
+                    cy="45%"
+                    innerRadius={45}
+                    outerRadius={75}
                     paddingAngle={2}
                   >
                     {stats.by_category.map((_, i) => (
@@ -81,11 +77,10 @@ export default function ReportsPage() {
                     formatter={(v) => formatRupiah(v)}
                   />
                   <Legend
-                    verticalAlign="middle"
-                    align="right"
-                    layout="vertical"
+                    verticalAlign="bottom"
+                    align="center"
                     iconType="circle"
-                    wrapperStyle={{ fontSize: 12, paddingLeft: 10 }}
+                    wrapperStyle={{ fontSize: 10, paddingTop: 8 }}
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -96,10 +91,10 @@ export default function ReportsPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-[#E5E2DC] p-6 fade-up fade-up-3" data-testid="report-monthly-chart">
+      <div className="bg-white rounded-2xl border border-[#E5E2DC] p-5 fade-up fade-up-3" data-testid="report-monthly-chart">
         <div className="eyebrow">Perbandingan</div>
-        <h3 className="font-display text-xl font-semibold text-[#1E3F32] mt-1">Pemasukan vs Pengeluaran (6 Bulan)</h3>
-        <div className="h-80 mt-4">
+        <h3 className="font-display text-base font-semibold text-[#1E3F32] mt-1">6 Bulan</h3>
+        <div className="h-64 mt-3">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={stats?.trend || []} margin={{ left: -10, right: 5, top: 10, bottom: 0 }} barGap={4}>
               <CartesianGrid strokeDasharray="2 4" stroke="#E5E2DC" vertical={false} />

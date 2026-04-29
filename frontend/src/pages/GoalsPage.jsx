@@ -3,6 +3,7 @@ import { useOutletContext } from "react-router-dom";
 import api, { formatRupiah, formatDateID } from "../lib/api";
 import { Plus, Trash2, X, Loader2, Target as TargetIcon } from "lucide-react";
 import { toast } from "sonner";
+import { TopBar } from "../components/Sidebar";
 
 const EMPTY_IMG = "https://static.prod-images.emergentagent.com/jobs/0d3bbc79-c3cb-43ec-8dab-45e35b4d6e20/images/2f98cb9e878b4696c58366781b5971c2e12c037b240099abad4cc4f235556685.png";
 
@@ -54,34 +55,33 @@ export default function GoalsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-end justify-between flex-wrap gap-4 fade-up">
-        <div>
-          <div className="eyebrow">Impian</div>
-          <h1 className="font-display text-4xl font-bold text-[#1E3F32] tracking-tight mt-2">Target Tabungan</h1>
-          <p className="text-[#697A6E] mt-2">Wujudkan rencana, satu langkah setiap hari</p>
-        </div>
-        <button onClick={() => setOpenAdd(true)} data-testid="add-goal-btn" className="flex items-center gap-2 px-5 h-12 rounded-xl bg-[#2C3D30] text-white font-semibold hover:bg-[#3A5240] active:scale-95 transition">
-          <Plus className="w-4 h-4" /> Tambah Target
-        </button>
-      </div>
+    <div className="space-y-5">
+      <TopBar
+        subtitle="Impian"
+        title="Target Tabungan"
+        rightSlot={
+          <button onClick={() => setOpenAdd(true)} data-testid="add-goal-btn" className="flex items-center gap-1.5 px-4 h-10 rounded-xl bg-[#2C3D30] text-white text-sm font-semibold hover:bg-[#3A5240] active:scale-95 transition">
+            <Plus className="w-4 h-4" /> Tambah
+          </button>
+        }
+      />
 
       {goals.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-[#E5E2DC] p-10 fade-up fade-up-1" data-testid="empty-goals">
-          <div className="grid md:grid-cols-[1fr_280px] items-center gap-8">
+        <div className="bg-white rounded-2xl border border-[#E5E2DC] p-6 fade-up fade-up-1" data-testid="empty-goals">
+          <div className="flex flex-col items-center text-center gap-5">
+            <img src={EMPTY_IMG} alt="" className="w-40 rounded-2xl object-cover" />
             <div>
               <div className="eyebrow">Mulai menabung</div>
-              <h2 className="font-display text-3xl font-bold text-[#1E3F32] mt-2">Belum ada target tabungan.</h2>
-              <p className="text-[#697A6E] mt-3 max-w-md">Tetapkan target seperti dana darurat, liburan, atau cicilan rumah. Sakuku akan membantu memantau kemajuanmu.</p>
-              <button onClick={() => setOpenAdd(true)} className="mt-5 inline-flex items-center gap-2 px-5 h-11 rounded-xl bg-[#D99B58] text-white font-semibold hover:opacity-90">
+              <h2 className="font-display text-xl font-bold text-[#1E3F32] mt-2">Belum ada target</h2>
+              <p className="text-sm text-[#697A6E] mt-2 max-w-sm mx-auto">Tetapkan target seperti dana darurat, liburan, atau cicilan rumah.</p>
+              <button onClick={() => setOpenAdd(true)} className="mt-4 inline-flex items-center gap-2 px-5 h-11 rounded-xl bg-[#D99B58] text-white text-sm font-semibold hover:opacity-90">
                 <Plus className="w-4 h-4" /> Buat target pertama
               </button>
             </div>
-            <img src={EMPTY_IMG} alt="" className="w-full rounded-2xl object-cover" />
           </div>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid gap-3">
           {goals.map((g, i) => {
             const pct = Math.min(100, Math.round((g.current_amount / g.target_amount) * 100));
             const done = pct >= 100;
@@ -135,8 +135,8 @@ export default function GoalsPage() {
       )}
 
       {openAdd && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-[#1E3F32]/40 backdrop-blur-sm p-4" onClick={() => setOpenAdd(false)} data-testid="goal-dialog">
-          <form onClick={(e) => e.stopPropagation()} onSubmit={submit} className="bg-white rounded-3xl border border-[#E5E2DC] w-full max-w-md p-7 shadow-2xl">
+        <div className="absolute inset-0 z-50 grid place-items-center bg-[#1E3F32]/50 backdrop-blur-sm p-4" onClick={() => setOpenAdd(false)} data-testid="goal-dialog">
+          <form onClick={(e) => e.stopPropagation()} onSubmit={submit} className="bg-white rounded-3xl border border-[#E5E2DC] w-full max-w-md p-6 shadow-2xl max-h-[85vh] overflow-y-auto">
             <div className="flex items-start justify-between mb-5">
               <div>
                 <div className="eyebrow">Baru</div>

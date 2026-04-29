@@ -3,6 +3,7 @@ import { useOutletContext } from "react-router-dom";
 import api, { formatRupiah } from "../lib/api";
 import { Plus, Trash2, Loader2, X } from "lucide-react";
 import { toast } from "sonner";
+import { TopBar } from "../components/Sidebar";
 
 function currentMonth() {
   const d = new Date();
@@ -65,30 +66,28 @@ export default function BudgetsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-end justify-between flex-wrap gap-4 fade-up">
-        <div>
-          <div className="eyebrow">Kontrol</div>
-          <h1 className="font-display text-4xl font-bold text-[#1E3F32] tracking-tight mt-2">Anggaran</h1>
-          <p className="text-[#697A6E] mt-2">Pantau pengeluaran sesuai rencana</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <input
-            type="month"
-            value={month}
-            onChange={(e) => setMonth(e.target.value)}
-            data-testid="budget-month-picker"
-            className="h-12 px-4 rounded-xl bg-white border border-[#E5E2DC] focus:border-[#2C3D30] outline-none"
-          />
+    <div className="space-y-5">
+      <TopBar
+        subtitle="Kontrol"
+        title="Anggaran"
+        rightSlot={
           <button
             onClick={() => setOpenAdd(true)}
             data-testid="add-budget-btn"
-            className="flex items-center gap-2 px-5 h-12 rounded-xl bg-[#2C3D30] text-white font-semibold hover:bg-[#3A5240] active:scale-95 transition"
+            className="flex items-center gap-1.5 px-4 h-10 rounded-xl bg-[#2C3D30] text-white text-sm font-semibold hover:bg-[#3A5240] active:scale-95 transition"
           >
             <Plus className="w-4 h-4" /> Tambah
           </button>
-        </div>
-      </div>
+        }
+      />
+
+      <input
+        type="month"
+        value={month}
+        onChange={(e) => setMonth(e.target.value)}
+        data-testid="budget-month-picker"
+        className="w-full h-11 px-4 rounded-xl bg-white border border-[#E5E2DC] focus:border-[#2C3D30] outline-none text-sm fade-up fade-up-1"
+      />
 
       {budgets.length === 0 ? (
         <div className="bg-white rounded-2xl border border-[#E5E2DC] p-12 text-center fade-up fade-up-1" data-testid="empty-budgets">
@@ -102,7 +101,7 @@ export default function BudgetsPage() {
           </button>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid gap-3">
           {budgets.map((b, i) => {
             const spent = spentByCategory(b.category);
             const pct = Math.min(100, Math.round((spent / b.amount) * 100));
@@ -142,8 +141,8 @@ export default function BudgetsPage() {
       )}
 
       {openAdd && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-[#1E3F32]/40 backdrop-blur-sm p-4" onClick={() => setOpenAdd(false)} data-testid="budget-dialog">
-          <form onClick={(e) => e.stopPropagation()} onSubmit={submit} className="bg-white rounded-3xl border border-[#E5E2DC] w-full max-w-md p-7 shadow-2xl">
+        <div className="absolute inset-0 z-50 grid place-items-center bg-[#1E3F32]/50 backdrop-blur-sm p-4" onClick={() => setOpenAdd(false)} data-testid="budget-dialog">
+          <form onClick={(e) => e.stopPropagation()} onSubmit={submit} className="bg-white rounded-3xl border border-[#E5E2DC] w-full max-w-md p-6 shadow-2xl max-h-[85vh] overflow-y-auto">
             <div className="flex items-start justify-between mb-5">
               <div>
                 <div className="eyebrow">Baru</div>

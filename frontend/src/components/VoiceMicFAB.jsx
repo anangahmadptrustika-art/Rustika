@@ -64,30 +64,28 @@ export default function VoiceMicFAB({ onTransactionAdded }) {
 
   return (
     <>
-      {/* Floating Mic Button */}
+      {/* Floating Mic Button - inside mobile frame */}
       <button
         onClick={() => setOpen(true)}
         data-testid="voice-mic-button"
-        className="fixed bottom-20 md:bottom-8 right-6 md:right-8 z-40 group"
+        className="absolute bottom-24 right-5 z-40"
         aria-label="Tambah transaksi via suara"
       >
-        <span className="relative grid place-items-center w-16 h-16 rounded-full bg-[#D99B58] text-white shadow-xl hover:scale-105 transition-transform duration-200 ease-out">
-          <Mic className="w-7 h-7" strokeWidth={1.8} />
-        </span>
-        <span className="hidden md:block absolute right-20 top-1/2 -translate-y-1/2 whitespace-nowrap text-xs font-semibold text-[#1E3F32] bg-white border border-[#E5E2DC] px-3 py-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-          Tekan untuk bicara
+        <span className="relative grid place-items-center w-14 h-14 rounded-full bg-[#D99B58] text-white shadow-xl active:scale-95 transition-transform duration-200">
+          <Mic className="w-6 h-6" strokeWidth={1.8} />
+          <span className="absolute inset-0 rounded-full bg-[#D99B58]/40 mic-pulse-ring" />
         </span>
       </button>
 
       {/* Modal */}
       {open && (
         <div
-          className="fixed inset-0 z-50 grid place-items-center bg-[#1E3F32]/40 backdrop-blur-sm p-4"
+          className="absolute inset-0 z-50 grid place-items-center bg-[#1E3F32]/50 backdrop-blur-sm p-4"
           onClick={() => setOpen(false)}
           data-testid="voice-modal"
         >
           <div
-            className="bg-white rounded-3xl border border-[#E5E2DC] w-full max-w-md p-7 shadow-2xl"
+            className="bg-white rounded-3xl border border-[#E5E2DC] w-full max-w-md p-6 shadow-2xl max-h-[85vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start justify-between mb-2">

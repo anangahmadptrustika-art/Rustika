@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { useOutletContext, Link } from "react-router-dom";
 import api, { formatRupiah, formatRupiahShort, formatDateID } from "../lib/api";
-import { useAuth } from "../context/AuthContext";
-import { TrendingUp, TrendingDown, Wallet, ArrowUpRight, ArrowDownRight, Plus } from "lucide-react";
+import { TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, Plus, Mic, Eye, EyeOff } from "lucide-react";
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
 } from "recharts";
 import AddTransactionDialog from "../components/AddTransactionDialog";
+import { HeaderUser } from "../components/Sidebar";
 
 export default function DashboardPage() {
-  const { user } = useAuth();
   const { refreshKey, refresh } = useOutletContext();
   const [stats, setStats] = useState(null);
   const [recent, setRecent] = useState([]);
   const [openAdd, setOpenAdd] = useState(false);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -29,123 +29,159 @@ export default function DashboardPage() {
   }, [refreshKey]);
 
   const monthLabel = new Date().toLocaleDateString("id-ID", { month: "long", year: "numeric" });
+  const masked = "Rp •••••••";
 
   return (
-    <div className="space-y-7">
-      {/* Header */}
-      <div className="flex items-end justify-between flex-wrap gap-4 fade-up">
-        <div>
-          <div className="eyebrow">Halo, {user?.name?.split(" ")[0] || "Sahabat"}</div>
-          <h1 className="font-display text-4xl sm:text-5xl font-bold text-[#1E3F32] tracking-tight mt-2">
-            Dasbor Keuangan
-          </h1>
-          <p className="text-[#697A6E] mt-2">Ringkasan untuk {monthLabel}</p>
+    <div className="space-y-5">
+      <HeaderUser />
+
+      {/* Wallet card */}
+      <div
+        className="relative rounded-3xl bg-[#2C3D30] text-white p-5 overflow-hidden fade-up fade-up-1"
+        data-testid="wallet-card"
+      >
+        {/* decorative shapes */}
+        <div className="absolute -top-12 -right-10 w-44 h-44 rounded-full bg-[#D99B58]/20 blur-2xl" />
+        <div className="absolute -bottom-16 -left-10 w-44 h-44 rounded-full bg-[#5F8575]/15 blur-2xl" />
+
+        <div className="relative flex items-center justify-between">
+          <div className="eyebrow text-white/70">Saldo Total</div>
+          <button
+            onClick={() => setHidden(!hidden)}
+            data-testid="toggle-balance-visibility"
+            className="w-8 h-8 rounded-full bg-white/10 backdrop-blur grid place-items-center text-white/80 hover:bg-white/20"
+          >
+            {hidden ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+          </button>
         </div>
-        <button
-          onClick={() => setOpenAdd(true)}
-          data-testid="dashboard-add-transaction-btn"
-          className="flex items-center gap-2 px-5 h-12 rounded-xl bg-[#2C3D30] text-white font-semibold hover:bg-[#3A5240] active:scale-95 transition"
+        <div
+          className="relative mt-2 font-display text-[2.1rem] font-bold tracking-tight tabular leading-none"
+          data-testid="balance-amount"
         >
-          <Plus className="w-4 h-4" /> Tambah Transaksi
-        </button>
-      </div>
+          {hidden ? masked : formatRupiah(stats?.balance ?? 0)}
+        </div>
+        <div className="relative text-xs text-white/60 mt-1.5">{monthLabel}</div>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <SummaryCard
-          testid="stat-balance"
-          label="Saldo Total"
-          value={formatRupiah(stats?.balance ?? 0)}
-          icon={<Wallet className="w-5 h-5" strokeWidth={1.5} />}
-          accent="primary"
-          delay="fade-up-1"
-        />
-        <SummaryCard
-          testid="stat-income"
-          label="Pemasukan Bulan Ini"
-          value={formatRupiah(stats?.total_income ?? 0)}
-          icon={<TrendingUp className="w-5 h-5" strokeWidth={1.5} />}
-          accent="income"
-          delay="fade-up-2"
-        />
-        <SummaryCard
-          testid="stat-expense"
-          label="Pengeluaran Bulan Ini"
-          value={formatRupiah(stats?.total_expense ?? 0)}
-          icon={<TrendingDown className="w-5 h-5" strokeWidth={1.5} />}
-          accent="expense"
-          delay="fade-up-3"
-        />
-      </div>
-
-      {/* Trend Chart + Recent transactions */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-[#E5E2DC] p-6 fade-up fade-up-3" data-testid="trend-chart-card">
-          <div className="flex items-center justify-between mb-1">
-            <div>
-              <div className="eyebrow">Tren 6 Bulan</div>
-              <h3 className="font-display text-xl font-semibold text-[#1E3F32] mt-1">Arus Kas</h3>
+        <div className="relative grid grid-cols-2 gap-3 mt-5">
+          <div className="bg-white/8 backdrop-blur-sm rounded-2xl p-3.5 border border-white/10" data-testid="stat-income">
+            <div className="flex items-center gap-1.5">
+              <span className="w-7 h-7 rounded-full bg-[#5F8575]/30 grid place-items-center">
+                <TrendingUp className="w-3.5 h-3.5 text-[#A7C4B5]" strokeWidth={2} />
+              </span>
+              <div className="text-[10px] uppercase tracking-wider font-bold text-white/70">Pemasukan</div>
+            </div>
+            <div className="mt-2 font-display text-base font-bold tabular">
+              {hidden ? "•••" : formatRupiahShort(stats?.total_income ?? 0)}
             </div>
           </div>
-          <div className="h-72 mt-4">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={stats?.trend || []} margin={{ left: -10, right: 5, top: 10, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="incomeColor" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#5F8575" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="#5F8575" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="expenseColor" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#C86753" stopOpacity={0.35} />
-                    <stop offset="100%" stopColor="#C86753" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="2 4" stroke="#E5E2DC" vertical={false} />
-                <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#697A6E" }} tickFormatter={(m) => m?.split("-")[1]} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: "#697A6E" }} tickFormatter={(v) => formatRupiahShort(v)} axisLine={false} tickLine={false} />
-                <Tooltip
-                  contentStyle={{ background: "#1E3F32", border: "none", borderRadius: 12, color: "#fff" }}
-                  labelStyle={{ color: "#D99B58", fontWeight: 700 }}
-                  formatter={(v, n) => [formatRupiah(v), n === "income" ? "Pemasukan" : "Pengeluaran"]}
-                />
-                <Area type="monotone" dataKey="income" stroke="#5F8575" strokeWidth={2.5} fill="url(#incomeColor)" />
-                <Area type="monotone" dataKey="expense" stroke="#C86753" strokeWidth={2.5} fill="url(#expenseColor)" />
-              </AreaChart>
-            </ResponsiveContainer>
+          <div className="bg-white/8 backdrop-blur-sm rounded-2xl p-3.5 border border-white/10" data-testid="stat-expense">
+            <div className="flex items-center gap-1.5">
+              <span className="w-7 h-7 rounded-full bg-[#C86753]/30 grid place-items-center">
+                <TrendingDown className="w-3.5 h-3.5 text-[#E1A99A]" strokeWidth={2} />
+              </span>
+              <div className="text-[10px] uppercase tracking-wider font-bold text-white/70">Pengeluaran</div>
+            </div>
+            <div className="mt-2 font-display text-base font-bold tabular">
+              {hidden ? "•••" : formatRupiahShort(stats?.total_expense ?? 0)}
+            </div>
           </div>
         </div>
+      </div>
 
-        <div className="bg-white rounded-2xl border border-[#E5E2DC] p-6 fade-up fade-up-4" data-testid="recent-transactions-card">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <div className="eyebrow">Aktivitas</div>
-              <h3 className="font-display text-xl font-semibold text-[#1E3F32] mt-1">Transaksi Terbaru</h3>
-            </div>
-            <Link to="/transactions" className="text-xs font-semibold text-[#2C3D30] hover:text-[#D99B58]" data-testid="link-all-transactions">
-              Lihat semua
-            </Link>
+      {/* Quick actions */}
+      <div className="grid grid-cols-3 gap-3 fade-up fade-up-2">
+        <QuickAction
+          testid="dashboard-add-transaction-btn"
+          onClick={() => setOpenAdd(true)}
+          icon={<Plus className="w-5 h-5" strokeWidth={2} />}
+          label="Tambah"
+          accent="bg-[#2C3D30] text-white"
+        />
+        <Link to="/transactions" data-testid="quick-action-transactions" className="contents">
+          <QuickAction
+            icon={<ArrowLeftRightTiny />}
+            label="Riwayat"
+            accent="bg-white border border-[#E5E2DC] text-[#1E3F32]"
+          />
+        </Link>
+        <QuickAction
+          testid="quick-action-voice"
+          onClick={() => {
+            const btn = document.querySelector('[data-testid="voice-mic-button"]');
+            btn?.click();
+          }}
+          icon={<Mic className="w-5 h-5" strokeWidth={2} />}
+          label="Suara"
+          accent="bg-[#D99B58] text-white"
+        />
+      </div>
+
+      {/* Mini Trend */}
+      <div className="bg-white rounded-2xl border border-[#E5E2DC] p-4 fade-up fade-up-3" data-testid="trend-chart-card">
+        <div className="flex items-center justify-between mb-1">
+          <div>
+            <div className="eyebrow">Arus Kas</div>
+            <h3 className="font-display text-base font-semibold text-[#1E3F32] mt-0.5">6 Bulan Terakhir</h3>
           </div>
-          {recent.length === 0 ? (
-            <div className="text-center py-10 text-[#8A9A86]">Belum ada transaksi</div>
-          ) : (
-            <div className="space-y-2">
-              {recent.slice(0, 6).map((t) => (
-                <div key={t.id} className="flex items-center gap-3 py-2 border-b border-[#F0EDE5] last:border-0" data-testid={`recent-tx-${t.id}`}>
-                  <div className={`w-9 h-9 rounded-xl grid place-items-center ${t.type === "income" ? "bg-[#5F8575]/15 text-[#5F8575]" : "bg-[#C86753]/15 text-[#C86753]"}`}>
-                    {t.type === "income" ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-semibold text-[#1E3F32] truncate">{t.description || t.category}</div>
-                    <div className="text-xs text-[#697A6E]">{t.category} · {formatDateID(t.date)}</div>
-                  </div>
-                  <div className={`text-sm font-bold tabular ${t.type === "income" ? "text-[#5F8575]" : "text-[#C86753]"}`}>
-                    {t.type === "income" ? "+" : "-"}{formatRupiahShort(t.amount)}
-                  </div>
+        </div>
+        <div className="h-44 mt-3 -mx-2">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={stats?.trend || []} margin={{ left: 0, right: 5, top: 5, bottom: 0 }}>
+              <defs>
+                <linearGradient id="incomeColor" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#5F8575" stopOpacity={0.4} />
+                  <stop offset="100%" stopColor="#5F8575" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="expenseColor" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#C86753" stopOpacity={0.35} />
+                  <stop offset="100%" stopColor="#C86753" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="month" tick={{ fontSize: 10, fill: "#8A9A86" }} tickFormatter={(m) => m?.split("-")[1]} axisLine={false} tickLine={false} />
+              <YAxis hide />
+              <Tooltip
+                contentStyle={{ background: "#1E3F32", border: "none", borderRadius: 12, color: "#fff", fontSize: 12 }}
+                labelStyle={{ color: "#D99B58", fontWeight: 700 }}
+                formatter={(v, n) => [formatRupiah(v), n === "income" ? "Pemasukan" : "Pengeluaran"]}
+              />
+              <Area type="monotone" dataKey="income" stroke="#5F8575" strokeWidth={2} fill="url(#incomeColor)" />
+              <Area type="monotone" dataKey="expense" stroke="#C86753" strokeWidth={2} fill="url(#expenseColor)" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Recent transactions */}
+      <div className="bg-white rounded-2xl border border-[#E5E2DC] p-5 fade-up fade-up-4" data-testid="recent-transactions-card">
+        <div className="flex items-center justify-between mb-3">
+          <div>
+            <div className="eyebrow">Aktivitas</div>
+            <h3 className="font-display text-base font-semibold text-[#1E3F32] mt-0.5">Transaksi Terbaru</h3>
+          </div>
+          <Link to="/transactions" className="text-xs font-semibold text-[#2C3D30] hover:text-[#D99B58]" data-testid="link-all-transactions">
+            Lihat semua
+          </Link>
+        </div>
+        {recent.length === 0 ? (
+          <div className="text-center py-8 text-[#8A9A86] text-sm">Belum ada transaksi</div>
+        ) : (
+          <div className="divide-y divide-[#F0EDE5]">
+            {recent.slice(0, 5).map((t) => (
+              <div key={t.id} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0" data-testid={`recent-tx-${t.id}`}>
+                <div className={`w-10 h-10 rounded-xl grid place-items-center shrink-0 ${t.type === "income" ? "bg-[#5F8575]/15 text-[#5F8575]" : "bg-[#C86753]/15 text-[#C86753]"}`}>
+                  {t.type === "income" ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold text-[#1E3F32] truncate">{t.description || t.category}</div>
+                  <div className="text-[11px] text-[#697A6E] mt-0.5">{t.category} · {formatDateID(t.date)}</div>
+                </div>
+                <div className={`text-sm font-bold tabular shrink-0 ${t.type === "income" ? "text-[#5F8575]" : "text-[#C86753]"}`}>
+                  {t.type === "income" ? "+" : "-"}{formatRupiahShort(t.amount)}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <AddTransactionDialog
@@ -157,21 +193,27 @@ export default function DashboardPage() {
   );
 }
 
-function SummaryCard({ label, value, icon, accent = "primary", testid, delay = "" }) {
-  const colors = {
-    primary: "bg-[#2C3D30] text-white",
-    income: "bg-[#5F8575]/12 text-[#5F8575]",
-    expense: "bg-[#C86753]/12 text-[#C86753]",
-  };
+function QuickAction({ icon, label, accent, onClick, testid }) {
   return (
-    <div className={`bg-white rounded-2xl border border-[#E5E2DC] p-6 fade-up ${delay}`} data-testid={testid}>
-      <div className="flex items-center justify-between">
-        <div className="eyebrow">{label}</div>
-        <div className={`w-9 h-9 rounded-xl grid place-items-center ${colors[accent]}`}>{icon}</div>
-      </div>
-      <div className="mt-4 font-display text-2xl sm:text-[1.7rem] font-bold text-[#1E3F32] tabular tracking-tight">
-        {value}
-      </div>
-    </div>
+    <button
+      onClick={onClick}
+      data-testid={testid}
+      type="button"
+      className={`flex flex-col items-center justify-center gap-1.5 h-20 rounded-2xl active:scale-95 transition ${accent}`}
+    >
+      <span className="grid place-items-center">{icon}</span>
+      <span className="text-[11px] font-semibold">{label}</span>
+    </button>
+  );
+}
+
+function ArrowLeftRightTiny() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8 3 4 7l4 4" />
+      <path d="M4 7h16" />
+      <path d="m16 21 4-4-4-4" />
+      <path d="M20 17H4" />
+    </svg>
   );
 }
