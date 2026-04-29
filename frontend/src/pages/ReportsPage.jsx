@@ -6,6 +6,7 @@ import {
   ResponsiveContainer, Legend,
 } from "recharts";
 import { TopBar } from "../components/Sidebar";
+import useTheme from "../hooks/useTheme";
 
 const COLORS = ["#FF8A00", "#21BE7C", "#EE4B5C", "#118EEA", "#9AA5B8", "#5C677D", "#FFC078", "#0E7BC9", "#D44A56"];
 
@@ -18,6 +19,17 @@ export default function ReportsPage() {
   const { refreshKey } = useOutletContext();
   const [stats, setStats] = useState(null);
   const [month, setMonth] = useState(currentMonth());
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+  const axisTick = { fontSize: 11, fill: isDark ? "#94A3B8" : "#5C677D" };
+  const tooltipStyle = {
+    background: isDark ? "#0B1220" : "#0F172A",
+    border: isDark ? "1px solid #1E293B" : "none",
+    borderRadius: 12,
+    color: "#fff",
+  };
+  const cursorFill = isDark ? "#1E293B" : "#EDF2F7";
+  const gridStroke = isDark ? "#1E293B" : "#E5E9F0";
 
   useEffect(() => {
     api.get("/stats/summary", { params: { month } }).then((r) => setStats(r.data)).catch(() => {});
@@ -73,14 +85,14 @@ export default function ReportsPage() {
                     ))}
                   </Pie>
                   <Tooltip
-                    contentStyle={{ background: "#0F172A", border: "none", borderRadius: 12, color: "#fff" }}
+                    contentStyle={tooltipStyle}
                     formatter={(v) => formatRupiah(v)}
                   />
                   <Legend
                     verticalAlign="bottom"
                     align="center"
                     iconType="circle"
-                    wrapperStyle={{ fontSize: 10, paddingTop: 8 }}
+                    wrapperStyle={{ fontSize: 10, paddingTop: 8, color: isDark ? "#94A3B8" : "#5C677D" }}
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -97,13 +109,13 @@ export default function ReportsPage() {
         <div className="h-64 mt-3">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={stats?.trend || []} margin={{ left: -10, right: 5, top: 10, bottom: 0 }} barGap={4}>
-              <CartesianGrid strokeDasharray="2 4" stroke="#E5E9F0" vertical={false} />
-              <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#5C677D" }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: "#5C677D" }} tickFormatter={(v) => formatRupiahShort(v)} axisLine={false} tickLine={false} />
+              <CartesianGrid strokeDasharray="2 4" stroke={gridStroke} vertical={false} />
+              <XAxis dataKey="month" tick={axisTick} axisLine={false} tickLine={false} />
+              <YAxis tick={axisTick} tickFormatter={(v) => formatRupiahShort(v)} axisLine={false} tickLine={false} />
               <Tooltip
-                contentStyle={{ background: "#0F172A", border: "none", borderRadius: 12, color: "#fff" }}
+                contentStyle={tooltipStyle}
                 formatter={(v, n) => [formatRupiah(v), n === "income" ? "Pemasukan" : "Pengeluaran"]}
-                cursor={{ fill: "#EDF2F7" }}
+                cursor={{ fill: cursorFill }}
               />
               <Bar dataKey="income" fill="#21BE7C" radius={[8, 8, 0, 0]} />
               <Bar dataKey="expense" fill="#EE4B5C" radius={[8, 8, 0, 0]} />

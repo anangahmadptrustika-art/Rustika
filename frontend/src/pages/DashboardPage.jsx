@@ -7,6 +7,7 @@ import {
 } from "recharts";
 import AddTransactionDialog from "../components/AddTransactionDialog";
 import { HeaderUser } from "../components/Sidebar";
+import useTheme from "../hooks/useTheme";
 
 export default function DashboardPage() {
   const { refreshKey, refresh } = useOutletContext();
@@ -14,6 +15,16 @@ export default function DashboardPage() {
   const [recent, setRecent] = useState([]);
   const [openAdd, setOpenAdd] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+  const axisTick = { fontSize: 10, fill: isDark ? "#94A3B8" : "#9AA5B8" };
+  const tooltipStyle = {
+    background: isDark ? "#0B1220" : "#0F172A",
+    border: isDark ? "1px solid #1E293B" : "none",
+    borderRadius: 12,
+    color: "#fff",
+    fontSize: 12,
+  };
 
   useEffect(() => {
     (async () => {
@@ -46,7 +57,7 @@ export default function DashboardPage() {
         <div className="absolute -bottom-16 -left-10 w-44 h-44 rounded-full bg-[#FF8A00]/15 blur-2xl" />
 
         <div className="relative flex items-center justify-between">
-          <div className="eyebrow text-white/70">Saldo Total</div>
+          <div className="text-[10px] tracking-[0.22em] uppercase font-bold text-white">Saldo Total</div>
           <button
             onClick={() => setHidden(!hidden)}
             data-testid="toggle-balance-visibility"
@@ -138,10 +149,10 @@ export default function DashboardPage() {
                   <stop offset="100%" stopColor="#EE4B5C" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="month" tick={{ fontSize: 10, fill: "#9AA5B8" }} tickFormatter={(m) => m?.split("-")[1]} axisLine={false} tickLine={false} />
+              <XAxis dataKey="month" tick={axisTick} tickFormatter={(m) => m?.split("-")[1]} axisLine={false} tickLine={false} />
               <YAxis hide />
               <Tooltip
-                contentStyle={{ background: "#0F172A", border: "none", borderRadius: 12, color: "#fff", fontSize: 12 }}
+                contentStyle={tooltipStyle}
                 labelStyle={{ color: "#FF8A00", fontWeight: 700 }}
                 formatter={(v, n) => [formatRupiah(v), n === "income" ? "Pemasukan" : "Pengeluaran"]}
               />
