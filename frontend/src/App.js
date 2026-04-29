@@ -11,6 +11,12 @@ import TransactionsPage from "./pages/TransactionsPage";
 import BudgetsPage from "./pages/BudgetsPage";
 import GoalsPage from "./pages/GoalsPage";
 import ReportsPage from "./pages/ReportsPage";
+import useTheme from "./hooks/useTheme";
+
+function ThemeBootstrap() {
+  useTheme(); // applies saved/system theme to <html>
+  return null;
+}
 
 function RootRedirect() {
   const { user, checked } = useAuth();
@@ -30,6 +36,7 @@ function App() {
     <div className="App">
       <AuthProvider>
         <BrowserRouter>
+          <ThemeBootstrap />
           <Toaster position="top-center" richColors />
           <Routes>
             <Route path="/" element={<RootRedirect />} />

@@ -110,6 +110,49 @@ h1, h2, h3, h4, h5, h6, .font-display {
 ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 6px; }
 ::-webkit-scrollbar-thumb:hover { background: #9AA5B8; }
 
+/* ============================
+   DARK MODE OVERRIDES
+   Activated via [data-theme="dark"] on <html>
+   Uses higher specificity to override Tailwind arbitrary classes
+   ============================ */
+[data-theme="dark"] body { background-color: #0B1220; color: #F1F5F9; }
+
+/* Backgrounds */
+[data-theme="dark"] .bg-white { background-color: #111A2C !important; }
+[data-theme="dark"] .bg-\[\#F5F7FA\] { background-color: #0B1220 !important; }
+[data-theme="dark"] .bg-\[\#EDF2F7\] { background-color: #1E293B !important; }
+[data-theme="dark"] .bg-\[\#E5E9F0\] { background-color: #334155 !important; }
+
+/* Text colors */
+[data-theme="dark"] .text-\[\#0F172A\] { color: #F1F5F9 !important; }
+[data-theme="dark"] .text-\[\#5C677D\] { color: #94A3B8 !important; }
+[data-theme="dark"] .text-\[\#9AA5B8\] { color: #64748B !important; }
+
+/* Borders */
+[data-theme="dark"] .border-\[\#E5E9F0\] { border-color: #1E293B !important; }
+
+/* Mobile nav uses bg-white/90 (with alpha) — needs separate override */
+[data-theme="dark"] .bg-white\/90 { background-color: rgba(17, 26, 44, 0.9) !important; }
+
+/* Modal overlay backdrop — already dark, but tweak for stronger contrast */
+[data-theme="dark"] .bg-\[\#0F172A\]\/50 { background-color: rgba(0, 0, 0, 0.65) !important; }
+
+/* Focus ring stays brand */
+
+/* Mobile phone frame container */
+[data-theme="dark"] .phone-frame { background-color: #0B1220 !important; }
+
+/* Inputs (used bg-[#F5F7FA] inside white cards) — already covered above */
+
+/* Scrollbar */
+[data-theme="dark"] ::-webkit-scrollbar-thumb { background: #334155; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* Toast (sonner) — make readable in dark */
+[data-theme="dark"] [data-sonner-toaster] { color-scheme: dark; }
+
+/* Recharts axis tick colors are inline; we keep them as-is for both modes */
+
 /* Page transitions */
 @keyframes page-slide-right {
     from { opacity: 0; transform: translateX(24px); }

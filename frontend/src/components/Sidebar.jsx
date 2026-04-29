@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { LayoutDashboard, ArrowLeftRight, Wallet, Target, BarChart3, LogOut } from "lucide-react";
+import { LayoutDashboard, ArrowLeftRight, Wallet, Target, BarChart3, LogOut, Sun, Moon } from "lucide-react";
+import useTheme from "../hooks/useTheme";
 
 const navItems = [
   { to: "/dashboard", label: "Beranda", icon: LayoutDashboard, testid: "nav-dashboard" },
@@ -60,6 +61,7 @@ export function TopBar({ title, subtitle, rightSlot }) {
 
 export function HeaderUser() {
   const { user, logout } = useAuth();
+  const { theme, toggle } = useTheme();
   const navigate = useNavigate();
   const onLogout = async () => { await logout(); navigate("/login"); };
 
@@ -76,14 +78,26 @@ export function HeaderUser() {
           </div>
         </div>
       </div>
-      <button
-        onClick={onLogout}
-        data-testid="logout-button"
-        className="w-10 h-10 rounded-full bg-white border border-[#E5E9F0] grid place-items-center text-[#5C677D] hover:text-[#EE4B5C] hover:border-[#EE4B5C] active:scale-95 transition"
-        aria-label="Keluar"
-      >
-        <LogOut className="w-4 h-4" strokeWidth={1.8} />
-      </button>
+      <div className="flex items-center gap-2">
+        <button
+          onClick={toggle}
+          data-testid="theme-toggle"
+          aria-label={theme === "dark" ? "Mode Terang" : "Mode Gelap"}
+          className="w-10 h-10 rounded-full bg-white border border-[#E5E9F0] grid place-items-center text-[#5C677D] hover:text-[#118EEA] hover:border-[#118EEA] active:scale-95 transition"
+        >
+          {theme === "dark"
+            ? <Sun className="w-4 h-4" strokeWidth={1.8} />
+            : <Moon className="w-4 h-4" strokeWidth={1.8} />}
+        </button>
+        <button
+          onClick={onLogout}
+          data-testid="logout-button"
+          className="w-10 h-10 rounded-full bg-white border border-[#E5E9F0] grid place-items-center text-[#5C677D] hover:text-[#EE4B5C] hover:border-[#EE4B5C] active:scale-95 transition"
+          aria-label="Keluar"
+        >
+          <LogOut className="w-4 h-4" strokeWidth={1.8} />
+        </button>
+      </div>
     </div>
   );
 }
